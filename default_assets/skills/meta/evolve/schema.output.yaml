@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  changes_applied:
+    type: integer
+    description: "Number of changes applied"
+  new_version:
+    type: string
+    description: "Updated version string"
+  notes_addressed:
+    type: integer
+    description: "Number of refinement notes resolved"

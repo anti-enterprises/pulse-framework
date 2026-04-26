@@ -1,0 +1,170 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - primary_profile
+properties:
+  primary_profile:
+    type: object
+    required:
+      - descriptor
+      - demographics
+    properties:
+      descriptor:
+        type: string
+      demographics:
+        type: object
+        required:
+          - role_titles
+          - company_stage
+          - revenue_range_usd
+          - employee_range
+          - industries_served
+          - geography_primary
+        properties:
+          role_titles:
+            type: array
+            items:
+              type: string
+          company_stage:
+            type: string
+            enum: [pre_revenue, early_revenue, early_growth, scale, mid_market, enterprise]
+          revenue_range_usd:
+            type: string
+          employee_range:
+            type: string
+          industries_served:
+            type: array
+            items:
+              type: string
+          geography_primary:
+            type: string
+          geography_secondary:
+            type: array
+            items:
+              type: string
+          tech_stack_signals:
+            type: string
+      psychographics:
+        type: object
+        properties:
+          worldview:
+            type: string
+          anxieties:
+            type: array
+            items:
+              type: string
+          aspirations:
+            type: array
+            items:
+              type: string
+          decision_style:
+            type: string
+            enum: [fast_informed_skeptical, slow_consensus, experimental_iterative, recommendation_driven, analysis_paralysis]
+          buying_triggers:
+            type: array
+            items:
+              type: string
+          status_signals:
+            type: array
+            items:
+              type: string
+          self_narrative:
+            type: string
+          language:
+            type: string
+      jobs_to_be_done:
+        type: array
+        items:
+          type: object
+          properties:
+            job:
+              type: string
+            when_trigger:
+              type: string
+            so_that:
+              type: string
+            urgency:
+              type: string
+              enum: [critical, high, medium, low, background]
+            frequency:
+              type: string
+              enum: [continuous, weekly, monthly, quarterly, annually, one_time]
+      pain_points:
+        type: array
+        items:
+          type: string
+      current_solutions:
+        type: array
+        items:
+          type: string
+      switching_friction:
+        type: string
+      wins_they_want:
+        type: array
+        items:
+          type: string
+      wish_list_items:
+        type: array
+        items:
+          type: string
+      dissatisfactions_with_alternatives:
+        type: string
+      trust_voices:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            why:
+              type: string
+            platform:
+              type: string
+      publications_read:
+        type: array
+        items:
+          type: string
+      podcasts_listened:
+        type: array
+        items:
+          type: string
+      events_attended:
+        type: array
+        items:
+          type: string
+      hangouts_online:
+        type: array
+        items:
+          type: string
+      hangouts_offline:
+        type: array
+        items:
+          type: string
+      buys_before:
+        type: array
+        items:
+          type: string
+      buys_during:
+        type: array
+        items:
+          type: string
+      buys_after:
+        type: array
+        items:
+          type: string
+      direct_competitors_known:
+        type: array
+        items:
+          type: string
+      adjacent_winners_inspiration:
+        type: array
+        items:
+          type: string
+      low_confidence_fields:
+        type: array
+        items:
+          type: string
+      research_queue:
+        type: array
+        items:
+          type: string

@@ -1,0 +1,8 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - skill_name
+properties:
+  skill_name:
+    type: string
+    description: "Name of the skill to evolve (e.g., listen/extract)"

@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  knowledge_path:
+    type: string
+    description: "Path to the authored knowledge file"
+  section_count:
+    type: integer
+    description: "Number of sections in the file"
+  word_count:
+    type: integer
+    description: "Total word count"

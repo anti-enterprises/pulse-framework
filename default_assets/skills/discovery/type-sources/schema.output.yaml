@@ -1,0 +1,49 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - sources
+properties:
+  sources:
+    type: array
+    items:
+      type: object
+      required:
+        - id
+        - url
+        - label
+        - kind
+        - strategic_role
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+          format: uri
+        label:
+          type: string
+        kind:
+          type: string
+          enum: [web_page, rss, podcast, youtube, review_aggregator, ad_library, community_forum, social_platform, other]
+        strategic_role:
+          type: string
+          enum:
+            - direct_competitor
+            - substitute
+            - complementary
+            - partner_candidate
+            - trust_network
+            - community_forum
+            - review_aggregator
+            - ad_library
+            - adjacent_winner
+            - acquisition_target
+        health:
+          type: string
+          enum: [healthy, warning, degraded, broken]
+          default: healthy
+        status:
+          type: string
+          enum: [active, paused, archived]
+          default: active
+        notes:
+          type: string

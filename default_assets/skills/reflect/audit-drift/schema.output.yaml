@@ -1,0 +1,13 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  drift_report_path:
+    type: string
+    description: "Path to the drift report"
+  overall_severity:
+    type: string
+    enum: [none, mild, moderate, severe]
+    description: "Overall drift severity"
+  drift_dimensions:
+    type: integer
+    description: "Number of drift dimensions detected"

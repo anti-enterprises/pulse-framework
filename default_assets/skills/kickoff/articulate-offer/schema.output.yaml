@@ -1,0 +1,33 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - core_promise
+  - mechanism
+  - pricing_model
+properties:
+  core_promise:
+    type: string
+    description: "One-sentence transformation or outcome the offer delivers"
+  mechanism:
+    type: string
+    description: "How the offer delivers on the promise"
+  pricing_model:
+    type: object
+    properties:
+      model:
+        type: string
+        description: "Pricing structure (per_seat, per_project, retainer, usage_based, hybrid)"
+      anchor_price:
+        type: string
+        description: "Reference price or range"
+      value_metric:
+        type: string
+        description: "What the customer is paying for"
+      positioning:
+        type: string
+        enum: [premium, mid_market, value, freemium]
+  proof_assets:
+    type: array
+    items:
+      type: string
+    description: "List of evidence supporting the promise"

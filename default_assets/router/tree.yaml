@@ -1,0 +1,257 @@
+version: 1
+default_start: start
+
+short_circuit:
+  direct_command: true
+  short_names: true
+  global_escapes:
+    "0": back
+    "q": quit
+    "?": help
+    "<": start_over
+
+guards:
+  - condition: "workspace.exists == false"
+    action: route_to
+    target: setup
+
+nodes:
+
+  start:
+    prompt: "What are you trying to do right now?"
+    options:
+      - label: "Set up a new workspace or framework"
+        next: setup
+      - label: "Work on positioning or the real-business question"
+        next: positioning
+      - label: "Add or manage sources"
+        next: sources
+      - label: "Run routine intelligence work"
+        next: routine
+      - label: "Investigate a hypothesis or direction"
+        next: investigate
+      - label: "Produce a deliverable (brief, survey, positioning, outreach)"
+        next: deliverable
+      - label: "Review or audit my workspace"
+        next: review
+      - label: "Work with the knowledge corpus (ingest, query, author)"
+        next: corpus
+      - label: "Show me the full command list"
+        action: run_command
+        command: pulse help
+
+  setup:
+    prompt: "What kind of setup?"
+    guard:
+      - condition: "workspace.exists == false"
+        hint: "No workspace yet. Recommending `pulse init` and `pulse onboard`."
+    options:
+      - label: "First-time framework setup (install, configure, corpus)"
+        action: run_command
+        command: pulse init
+        confirm: >
+          This will set up ~/.pulse/, install framework components, and
+          optionally install the local RAG corpus. Proceed?
+      - label: "Create a new workspace for a client or project"
+        action: run_command
+        command: pulse workspace-new
+      - label: "Onboard a new workspace (full kickoff)"
+        action: run_command
+        command: pulse onboard
+        confirm: >
+          This runs the full kickoff playbook -- identity, customer profile,
+          offer, goals, position, ecosystem, and sources. ~60 minutes.
+          Proceed?
+      - label: "Back"
+        action: back
+
+  routine:
+    prompt: "How deep a pass do you want to run?"
+    guard:
+      - condition: "workspace.position_set == false"
+        action: route_to
+        target: positioning
+        hint: >
+          This workspace needs positioning set before running routine work.
+          Redirecting to positioning setup.
+      - condition: "workspace.sources_count < 5"
+        hint: >
+          Note: only {{ workspace.sources_count }} sources are active.
+          Routine passes work best with 10+. Consider adding sources first.
+    options:
+      - label: "Weekly -- extract, score, update directions (~10 min)"
+        action: run_command
+        command: pulse weekly
+        confirm: >
+          Running pulse weekly on workspace `{{ workspace.id }}`:
+            - Extract from {{ workspace.sources_count }} active sources (last 7d)
+            - Score new atoms against {{ workspace.active_hypotheses_count }} active hypotheses
+            - Update direction momentum
+            - Write weekly digest
+          Proceed?
+      - label: "Monthly -- weekly plus hypothesis proposals (~25 min)"
+        action: run_command
+        command: pulse monthly
+        confirm: >
+          Running pulse monthly. This extends the weekly pass with
+          commodity-pattern synthesis, gap-map analysis, and monthly
+          digest. ~25 minutes. Proceed?
+      - label: "Quarterly -- full review with drift audit (~60 min)"
+        action: run_command
+        command: pulse quarterly
+        confirm: >
+          Running pulse quarterly. Full review: monthly synthesis plus
+          position drift audit, real-business recheck, hypothesis
+          postmortems, ecosystem refresh, quarterly review brief.
+          ~60 minutes. Proceed?
+      - label: "Just one step -- let me pick"
+        next: routine_granular
+      - label: "Back"
+        action: back
+
+  routine_granular:
+    prompt: "Which step?"
+    options:
+      - label: "Extract from active sources"
+        action: run_command
+        command: pulse extract
+      - label: "Score new signals against hypotheses"
+        action: run_command
+        command: pulse score-signals
+      - label: "Update direction momentum"
+        action: run_command
+        command: pulse update-directions
+      - label: "Propose new hypotheses from atom clusters"
+        action: run_command
+        command: pulse propose-hypothesis
+      - label: "Back"
+        action: back
+
+  positioning:
+    prompt: "What aspect of positioning?"
+    options:
+      - label: "Set or update the 4x2 matrix and intention"
+        action: run_command
+        command: pulse set-position
+      - label: "Redo the real-business question"
+        action: run_command
+        command: pulse set-identity
+      - label: "Update customer profile"
+        action: run_command
+        command: pulse profile-customer
+      - label: "Articulate or update the offer"
+        action: run_command
+        command: pulse articulate-offer
+      - label: "Full reposition -- rebuild everything"
+        action: run_command
+        command: pulse reposition
+        confirm: >
+          Full reposition rebuilds identity, customer, offer, goals,
+          position, and ecosystem. ~45 minutes. Existing answers are
+          shown and you choose which to rebuild. Proceed?
+      - label: "Back"
+        action: back
+
+  sources:
+    prompt: "What do you want to do with sources?"
+    options:
+      - label: "Add a new source (single URL)"
+        action: run_command
+        command: pulse add-source
+      - label: "Add multiple sources (URL list, typed by strategic role)"
+        action: run_command
+        command: pulse type-sources
+      - label: "Map the full ecosystem (Hormozi framework)"
+        action: run_command
+        command: pulse map-ecosystem
+      - label: "Map the trust network (Abraham framework)"
+        action: run_command
+        command: pulse map-trust-network
+      - label: "Scan for acquisition targets (Frasier framework)"
+        action: run_command
+        command: pulse scan-acquisitions
+      - label: "Register an external research source"
+        action: run_command
+        command: pulse connect-source
+      - label: "Back"
+        action: back
+
+  investigate:
+    prompt: "What are you investigating?"
+    options:
+      - label: "A specific hypothesis (see evidence, score new signals)"
+        action: run_command
+        command: pulse score-signals
+      - label: "A specific direction (see trajectory, related factors)"
+        action: run_command
+        command: pulse update-directions
+      - label: "Commodity pattern across competitors"
+        action: run_command
+        command: pulse find-commodity-pattern
+      - label: "Gaps in the market"
+        action: run_command
+        command: pulse find-gaps
+      - label: "Back"
+        action: back
+
+  deliverable:
+    prompt: "What kind of deliverable?"
+    options:
+      - label: "Content brief (from a hypothesis or direction)"
+        action: run_command
+        command: pulse write-brief
+      - label: "Positioning statement"
+        action: run_command
+        command: pulse write-positioning
+      - label: "JTBD-style customer survey"
+        action: run_command
+        command: pulse draft-survey
+      - label: "Outreach sequence"
+        action: run_command
+        command: pulse draft-outreach
+      - label: "Back"
+        action: back
+
+  review:
+    prompt: "What kind of review?"
+    options:
+      - label: "Quick workspace status"
+        action: run_command
+        command: pulse workspace-status
+      - label: "Position drift audit (declared vs detected)"
+        action: run_command
+        command: pulse audit-drift
+      - label: "Hypothesis postmortem (confirmed or retired)"
+        action: run_command
+        command: pulse postmortem
+      - label: "Full quarterly review"
+        action: run_command
+        command: pulse quarterly
+      - label: "Back"
+        action: back
+
+  corpus:
+    prompt: "What do you want to do with the knowledge corpus?"
+    guard:
+      - condition: "corpus.enabled == false"
+        hint: >
+          The corpus is not enabled. Enable it with `pulse enable-corpus`
+          to unlock ingestion, querying, and corpus-assisted authoring.
+    options:
+      - label: "Ingest files"
+        action: run_command
+        command: pulse ingest
+      - label: "Query the corpus directly"
+        action: run_command
+        command: pulse corpus-query
+      - label: "Author or refine a knowledge file"
+        action: run_command
+        command: pulse author-knowledge
+      - label: "Refine an existing knowledge file with a note"
+        action: run_command
+        command: pulse refine-knowledge
+      - label: "See corpus status"
+        action: run_command
+        command: pulse corpus-status
+      - label: "Back"
+        action: back

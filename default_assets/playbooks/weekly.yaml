@@ -1,0 +1,53 @@
+name: pulse weekly
+version: 1.0.0
+description: >
+  Routine weekly intelligence pass. Extracts new content from active
+  sources, scores signals against active hypotheses, updates direction
+  momentum, and produces a weekly digest.
+layer: operational
+cadence: weekly
+operator_time: "~10m"
+aliases:
+  - pulse intel
+  - pulse w
+
+requires:
+  workspace_exists: true
+  position_set: true
+  sources_min: 1
+
+defaults:
+  window_days: 7
+  max_atoms_per_source: 50
+
+steps:
+  - id: extract
+    skill: pulse extract
+    with:
+      window: "last_7d"
+    on_failure: log_and_continue
+    timeout_s: 600
+
+  - id: link_atoms_to_directions
+    skill: pulse update-directions
+    with:
+      link_only: "true"
+    on_failure: log_and_continue
+
+  - id: score_signals
+    skill: pulse score-signals
+    on_failure: log_and_continue
+
+  - id: propose_new
+    skill: pulse propose-hypothesis
+    when: "true"
+    on_failure: log_and_continue
+
+  - id: write_digest
+    skill: pulse write-brief
+    with:
+      kind: weekly_digest
+    on_failure: log_and_continue
+
+on_complete:
+  print_summary: true

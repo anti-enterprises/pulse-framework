@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# pulse-skills-framework setup — register skills with Claude Code / Codex
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SOURCE_SKILLS="$SCRIPT_DIR/.claude/skills"
+
+# Parse flags
+UNINSTALL=0
+HOST="auto"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --uninstall) UNINSTALL=1; shift ;;
+    --host) HOST="$2"; shift 2 ;;
+    --host=*) HOST="${1#--host=}"; shift ;;
+    *) shift ;;
+  esac
+done
+
+# Determine which hosts to install for
+INSTALL_CLAUDE=0
+INSTALL_CODEX=0
+case "$HOST" in
+  auto)
+    command -v claude >/dev/null 2>&1 && INSTALL_CLAUDE=1
+    command -v codex >/dev/null 2>&1 && INSTALL_CODEX=1
+    # Default to claude if nothing found
+    [ "$INSTALL_CLAUDE" -eq 0 ] && [ "$INSTALL_CODEX" -eq 0 ] && INSTALL_CLAUDE=1
+    ;;
+  claude) INSTALL_CLAUDE=1 ;;
+  codex)  INSTALL_CODEX=1 ;;
+  *) echo "Unknown --host: $HOST (expected claude, codex, or auto)" >&2; exit 1 ;;
+esac
+
+# Helper: link skills into a target directory
+link_skills() {
+  local target_dir="$1"
+  mkdir -p "$target_dir"
+  local linked=()
+  for skill_dir in "$SOURCE_SKILLS"/*/; do
+    [ -f "$skill_dir/SKILL.md" ] || continue
+    local name="$(basename "$skill_dir")"
+    ln -snf "$skill_dir" "$target_dir/$name"
+    linked+=("$name")
+  done
+  echo "  Linked ${#linked[@]} skills to $target_dir"
+}
+
+# Helper: unlink skills from a target directory
+unlink_skills() {
+  local target_dir="$1"
+  local removed=()
+  for link in "$target_dir"/pulse*; do
+    [ -L "$link" ] || continue
+    local dest="$(readlink "$link")"
+    case "$dest" in
+      "$SOURCE_SKILLS"/*|*pulse-skills-framework*)
+        rm -f "$link"
+        removed+=("$(basename "$link")")
+        ;;
+    esac
+  done
+  echo "  Removed ${#removed[@]} symlinks from $target_dir"
+}
+
+if [ "$UNINSTALL" -eq 1 ]; then
+  [ "$INSTALL_CLAUDE" -eq 1 ] && unlink_skills "$HOME/.claude/skills"
+  [ "$INSTALL_CODEX" -eq 1 ]  && unlink_skills "$HOME/.codex/skills"
+  echo "Pulse skills uninstalled."
+  exit 0
+fi
+
+# Install
+echo "Installing Pulse skills..."
+[ "$INSTALL_CLAUDE" -eq 1 ] && echo "Claude Code:" && link_skills "$HOME/.claude/skills"
+[ "$INSTALL_CODEX" -eq 1 ]  && echo "Codex:"       && link_skills "$HOME/.codex/skills"
+echo "Done."

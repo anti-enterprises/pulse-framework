@@ -1,0 +1,16 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - declared_business
+properties:
+  declared_business:
+    type: string
+  real_business:
+    type: string
+  real_business_delta:
+    type: string
+  scope_statement:
+    type: string
+  identity_last_reviewed:
+    type: string
+    format: date-time

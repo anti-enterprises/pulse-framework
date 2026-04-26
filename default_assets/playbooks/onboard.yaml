@@ -1,0 +1,132 @@
+name: pulse onboard
+version: 1.1.0
+description: >
+  Master kickoff playbook. Walks a new workspace through identity,
+  customer profiling, offer articulation, goal setting, position
+  mapping, ecosystem discovery, and source typing. Produces a
+  fully-initialized workspace ready for operational skills.
+  ~60-90 minutes of interactive work with checkpoints between sections.
+layer: kickoff
+cadence: one_time
+operator_time: "~90m"
+aliases:
+  - pulse kickoff
+
+requires:
+  workspace_exists: true
+  position_set: false
+  mode: interactive
+
+defaults:
+  mode: interactive
+
+steps:
+  # ── Step 1: Set identity ──────────────────────────────────
+  - id: set_identity
+    skill: pulse set-identity
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: halt
+
+  # ── Checkpoint: identity complete ─────────────────────────
+  - id: checkpoint_identity
+    checkpoint:
+      prompt: "Identity set. Continue to customer profiling? This is the deepest section (~30 min)."
+      options:
+        - label: "Continue to customer profile"
+          action: proceed
+        - label: "Stop here for now"
+          action: halt_gracefully
+
+  # ── Step 2: Profile customer (the big one) ────────────────
+  - id: profile_customer
+    skill: pulse profile-customer
+    with:
+      mode: "{{ defaults.mode }}"
+      walk_mode: auto
+    on_failure: checkpoint
+    timeout_s: 1800
+
+  # ── Checkpoint: customer profile complete ──────────────────
+  - id: checkpoint_customer
+    checkpoint:
+      prompt: >
+        Customer profile captured. Low-confidence fields will generate
+        research queue items. Continue to offer articulation?
+      options:
+        - label: "Continue"
+          action: proceed
+        - label: "Stop here"
+          action: halt_gracefully
+
+  # ── Step 3: Articulate offer ──────────────────────────────
+  - id: articulate_offer
+    skill: pulse articulate-offer
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: log_and_continue
+
+  # ── Step 4: Set goals ─────────────────────────────────────
+  - id: set_goals
+    skill: pulse set-goals
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: log_and_continue
+
+  # ── Step 5: Set position ──────────────────────────────────
+  - id: set_position
+    skill: pulse set-position
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: log_and_continue
+
+  # ── Checkpoint: core kickoff complete ─────────────────────
+  - id: checkpoint_ecosystem
+    checkpoint:
+      prompt: "Core kickoff complete. Continue to ecosystem mapping and source discovery?"
+      options:
+        - label: "Yes, map ecosystem"
+          action: proceed
+        - label: "Finish here, I'll add sources later"
+          action: halt_gracefully
+
+  # ── Step 6: Map ecosystem ─────────────────────────────────
+  - id: map_ecosystem
+    skill: pulse map-ecosystem
+    with:
+      mode: "{{ defaults.mode }}"
+      expand_via_web: false
+    on_failure: log_and_continue
+
+  # ── Step 7: Type sources ──────────────────────────────────
+  - id: type_sources
+    skill: pulse type-sources
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: log_and_continue
+
+  # ── Final checkpoint ──────────────────────────────────────
+  - id: final_checkpoint
+    checkpoint:
+      prompt: >
+        Onboarding complete. Your workspace is now initialized with
+        identity, customer profile, offer, goals, position, ecosystem,
+        and typed sources. Run `pulse workspace-status` to review.
+      options:
+        - label: "Done"
+          action: proceed
+
+on_complete:
+  print_summary: true
+  message: >
+    Workspace onboarding finished. All kickoff skills have run.
+    Recommended next steps:
+      - `pulse workspace-status` to review the full workspace state
+      - `pulse ingest` to start building your corpus
+      - `pulse reindex` to rebuild the search index
+
+on_failure:
+  message: >
+    Onboarding did not complete fully. Check the run log for details.
+    You can resume from where you left off by running `pulse onboard`
+    again — completed steps will be skipped via idempotency.

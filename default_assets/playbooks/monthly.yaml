@@ -1,0 +1,37 @@
+name: pulse monthly
+version: 1.0.0
+description: >
+  Monthly synthesis. Extends the weekly pass with commodity-pattern
+  detection, gap-map analysis, and a monthly digest.
+layer: operational
+cadence: monthly
+operator_time: "~25m"
+
+requires:
+  workspace_exists: true
+  position_set: true
+  sources_min: 5
+
+defaults:
+  window_days: 30
+
+steps:
+  - id: weekly_pass
+    include: weekly
+
+  - id: commodity_pattern
+    skill: pulse find-commodity-pattern
+    on_failure: log_and_continue
+
+  - id: gap_map
+    skill: pulse find-gaps
+    on_failure: log_and_continue
+
+  - id: monthly_digest
+    skill: pulse write-brief
+    with:
+      kind: monthly_digest
+    on_failure: log_and_continue
+
+on_complete:
+  print_summary: true

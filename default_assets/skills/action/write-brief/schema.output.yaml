@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  brief_path:
+    type: string
+    description: "Path to the generated brief file"
+  kind:
+    type: string
+    description: "Type of brief generated"
+  word_count:
+    type: integer
+    description: "Word count of the brief"

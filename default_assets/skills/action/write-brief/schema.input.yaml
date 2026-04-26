@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+  - kind
+properties:
+  workspace_id:
+    type: string
+    description: "Target workspace ID"
+  kind:
+    type: string
+    enum:
+      - weekly_digest
+      - monthly_digest
+      - quarterly_review
+      - hypothesis_brief
+      - direction_brief
+    description: "Type of brief to generate"

@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - framework
+  - topic
+properties:
+  framework:
+    type: string
+    description: "Framework or methodology name"
+  topic:
+    type: string
+    description: "Specific topic within the framework"

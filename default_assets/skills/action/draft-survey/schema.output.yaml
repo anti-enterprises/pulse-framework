@@ -1,0 +1,14 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  survey_path:
+    type: string
+    description: "Path to the generated survey YAML"
+  question_count:
+    type: integer
+    description: "Number of questions in the survey"
+  hypotheses_targeted:
+    type: array
+    items:
+      type: string
+    description: "Hypothesis IDs the survey validates"

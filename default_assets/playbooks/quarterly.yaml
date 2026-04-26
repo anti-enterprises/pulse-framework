@@ -1,0 +1,51 @@
+name: pulse quarterly
+version: 1.0.0
+description: >
+  Quarterly position audit and review. Extends the monthly pass with
+  position drift audit, hypothesis postmortems, ecosystem refresh,
+  and a quarterly review brief.
+layer: operational
+cadence: quarterly
+operator_time: "~60m"
+
+requires:
+  workspace_exists: true
+  position_set: true
+  sources_min: 5
+
+defaults:
+  window_days: 90
+
+steps:
+  - id: monthly_pass
+    include: monthly
+
+  - id: drift_audit
+    skill: pulse audit-drift
+    on_failure: log_and_continue
+
+  - id: postmortems
+    skill: pulse postmortem
+    on_failure: log_and_continue
+
+  - id: ecosystem_refresh
+    skill: pulse map-ecosystem
+    on_failure: log_and_continue
+
+  - id: checkpoint_review
+    checkpoint:
+      prompt: "Review the quarterly synthesis so far. Ready to generate the brief?"
+      options:
+        - label: "Generate quarterly brief"
+          action: proceed
+        - label: "Skip brief, finish here"
+          action: halt_gracefully
+
+  - id: quarterly_brief
+    skill: pulse write-brief
+    with:
+      kind: quarterly_review
+    on_failure: log_and_continue
+
+on_complete:
+  print_summary: true

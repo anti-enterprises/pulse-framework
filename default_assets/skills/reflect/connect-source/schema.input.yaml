@@ -1,0 +1,21 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+  - name
+  - kind
+properties:
+  workspace_id:
+    type: string
+    description: "Target workspace ID"
+  name:
+    type: string
+    description: "Human-readable source name"
+  kind:
+    type: string
+    enum: [notebooklm, external_app, book_collection, podcast, course, other]
+    description: "Type of external source"
+  url:
+    type: string
+    format: uri
+    description: "URL of the external source (optional)"

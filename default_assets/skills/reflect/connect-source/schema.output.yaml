@@ -1,0 +1,9 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  source_added:
+    type: boolean
+    description: "Whether the source was successfully added"
+  source_name:
+    type: string
+    description: "Name of the registered source"

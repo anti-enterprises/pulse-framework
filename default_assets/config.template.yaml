@@ -1,0 +1,29 @@
+schema_version: 1
+
+llm:
+  provider: anthropic
+  model: claude-sonnet-4-20250514
+  api_key_env: ANTHROPIC_API_KEY
+  api_key: null
+  # Optional. When set (e.g., to "claude_code"), the CLI does NOT call the
+  # LLM provider for llm_procedure skills or playbooks. It prints a redirect
+  # to the named host's skill (e.g., /pulse-extract in Claude Code) and
+  # exits cleanly. State-only verbs (workspace-*, reindex, corpus-*) work
+  # normally either way. Leave null to use the API directly.
+  delegated_runtime: null
+
+active_workspace: null
+
+corpus:
+  enabled: false
+
+defaults:
+  workspace_directory: ~/.pulse/workspaces
+  log_level: info
+  output_format: text
+
+telemetry:
+  enabled: false
+
+permissions:
+  emitters: {}

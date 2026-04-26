@@ -1,0 +1,20 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  atoms_scored:
+    type: integer
+    description: "Number of atoms scored"
+  hypotheses_updated:
+    type: integer
+    description: "Number of hypotheses with updated scores"
+  state_transitions:
+    type: array
+    items:
+      type: object
+      properties:
+        hypothesis_id:
+          type: string
+        old_state:
+          type: string
+        new_state:
+          type: string

@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  hypotheses_proposed:
+    type: integer
+    description: "Number of new hypotheses created"
+  clusters_found:
+    type: integer
+    description: "Number of atom clusters identified"
+  hypotheses_merged:
+    type: integer
+    description: "Number merged into existing hypotheses"

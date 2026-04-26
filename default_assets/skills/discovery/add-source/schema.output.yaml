@@ -1,0 +1,15 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  id:
+    type: string
+  url:
+    type: string
+  label:
+    type: string
+  kind:
+    type: string
+  strategic_role:
+    type: string
+  status:
+    type: string

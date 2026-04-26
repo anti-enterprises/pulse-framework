@@ -1,0 +1,9 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  updated:
+    type: boolean
+    description: "Whether the note was successfully appended"
+  skill_name:
+    type: string
+    description: "Name of the refined skill"

@@ -1,0 +1,80 @@
+name: strategic-roles
+version: 1
+description: >
+  The 10 strategic roles used to classify ecosystem entities.
+  Every source in the ecosystem is assigned one primary role.
+  Roles determine how data from that source is weighted and
+  surfaced in downstream skills.
+
+roles:
+  - id: direct_competitor
+    name: Direct Competitor
+    definition: >
+      Sells a similar product or service to the same customer segment.
+      Competes directly for the same budget line.
+    example: "If you sell AI consulting to SMBs, another AI consultancy targeting the same segment."
+
+  - id: substitute
+    name: Substitute
+    definition: >
+      Solves the same job-to-be-done but through a fundamentally different
+      approach or category. The customer might choose this instead.
+    example: "If you sell AI consulting, a DIY AI platform (like Jasper) is a substitute — different category, same JTBD."
+
+  - id: complementary
+    name: Complementary
+    definition: >
+      A product or service customers use alongside yours. Not competitive —
+      both benefit when the other succeeds.
+    example: "If you sell AI strategy consulting, a data pipeline tool (like Fivetran) is complementary."
+
+  - id: partner_candidate
+    name: Partner Candidate
+    definition: >
+      A business that serves the same customer before, during, or after
+      you do, with potential for formal partnership or referral arrangement.
+    example: "A CRM vendor whose customers are your ideal prospects. Co-marketing or integration opportunity."
+
+  - id: trust_network
+    name: Trust Network
+    definition: >
+      An individual or organization the target customer trusts for advice,
+      recommendations, or thought leadership. Influences buying decisions.
+    example: "A respected industry podcast host, a well-known advisor, or a peer community leader."
+
+  - id: community_forum
+    name: Community Forum
+    definition: >
+      A gathering place (online or offline) where target customers
+      discuss problems, share solutions, and form opinions.
+    example: "A Slack community for SaaS founders, a subreddit like r/ExperiencedDevs, a local meetup group."
+
+  - id: review_aggregator
+    name: Review Aggregator
+    definition: >
+      A platform where customers leave reviews, ratings, or comparisons
+      of products in your category or adjacent categories.
+    example: "G2, Capterra, TrustRadius, or industry-specific review sites."
+
+  - id: ad_library
+    name: Ad Library
+    definition: >
+      A source for observing competitors' advertising creative, spend
+      patterns, and messaging positioning over time.
+    example: "Meta Ad Library, Google Ads Transparency Center, LinkedIn Ad Library."
+
+  - id: adjacent_winner
+    name: Adjacent Winner
+    definition: >
+      A business in a different industry that has solved a positioning,
+      growth, or operational problem analogous to yours. Source of
+      cross-industry intelligence and strategic inspiration.
+    example: "Shopify (opinionated platform), Basecamp (bootstrapped longevity), Stripe (premium quality positioning)."
+
+  - id: acquisition_target
+    name: Acquisition Target
+    definition: >
+      A smaller business, tool, or team that could be acquired to
+      accelerate capability, expand the customer base, or consolidate
+      market position.
+    example: "A small niche tool with 500 users in your exact ICP that's bootstrapped and potentially acquirable."

@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pulse-skills"
+version = "0.1.0"
+description = "A filesystem-based business intelligence skills framework"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Pulse Skills Framework"},
+]
+
+dependencies = [
+    "click>=8.1",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "jinja2>=3.1",
+    "rich>=13.0",
+    "anthropic>=0.40",
+    "jsonschema>=4.20",
+    "python-frontmatter>=1.1",
+]
+
+[project.optional-dependencies]
+corpus = ["lancedb", "voyageai", "unstructured[pdf,docx]"]
+corpus-openai = ["lancedb", "openai", "unstructured[pdf,docx]"]
+corpus-local = ["lancedb", "sentence-transformers", "unstructured[pdf,docx]"]
+dev = ["pytest", "pytest-cov", "ruff", "mypy"]
+
+[project.scripts]
+pulse = "pulse.cli:main"
+pulse-install-skills = "pulse.install_skills:main"
+
+[tool.setuptools.packages.find]
+include = ["pulse*"]
+
+[tool.setuptools.package-data]
+pulse = ["py.typed"]
+"*" = ["default_assets/**/*"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"

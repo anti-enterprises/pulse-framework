@@ -1,0 +1,13 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  postmortem_path:
+    type: string
+    description: "Path to the postmortem report"
+  outcome:
+    type: string
+    enum: [confirmed, retired, contested]
+    description: "Hypothesis outcome"
+  key_learning:
+    type: string
+    description: "Primary insight from the postmortem"

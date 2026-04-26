@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  commodity_dimensions:
+    type: integer
+    description: "Number of commodity dimensions identified"
+  high_risk_count:
+    type: integer
+    description: "Number of dimensions with high commodity risk"
+  output_path:
+    type: string
+    description: "Path to the written analysis file"

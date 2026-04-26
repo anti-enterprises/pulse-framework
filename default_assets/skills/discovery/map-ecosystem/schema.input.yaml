@@ -1,0 +1,16 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+properties:
+  workspace_id:
+    type: string
+    description: "Target workspace ID"
+  mode:
+    type: string
+    enum: [interactive, headless]
+    default: interactive
+  expand_via_web:
+    type: boolean
+    default: false
+    description: "Use web search to expand the ecosystem beyond customer-profile seeds."

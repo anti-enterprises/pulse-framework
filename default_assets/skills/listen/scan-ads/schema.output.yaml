@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  atoms_created:
+    type: integer
+    description: "Number of atoms from ad analysis"
+  ads_analyzed:
+    type: integer
+    description: "Number of ads processed"
+  sources_scanned:
+    type: integer
+    description: "Number of ad library sources scanned"

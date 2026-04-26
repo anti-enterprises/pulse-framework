@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  outreach_path:
+    type: string
+    description: "Path to the generated outreach sequence"
+  touch_count:
+    type: integer
+    description: "Number of touches in the sequence"
+  target_persona:
+    type: string
+    description: "Target persona descriptor"

@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  acquisition_targets_path:
+    type: string
+    description: "Path to the acquisition targets YAML"
+  targets_identified:
+    type: integer
+    description: "Total acquisition targets found"
+  categories_covered:
+    type: integer
+    description: "Number of acquisition categories represented"

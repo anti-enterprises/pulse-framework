@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+properties:
+  workspace_id:
+    type: string
+    description: "Target workspace ID"
+  window:
+    type: string
+    default: last_7d
+    description: "Time window for extraction (e.g., last_7d, last_30d)"
+  max_per_source:
+    type: integer
+    default: 50
+    minimum: 1
+    maximum: 500
+    description: "Maximum atoms to extract per source"

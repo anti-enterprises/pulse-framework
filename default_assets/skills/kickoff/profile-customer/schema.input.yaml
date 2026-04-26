@@ -1,0 +1,22 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+properties:
+  workspace_id:
+    type: string
+    description: "Target workspace ID"
+  mode:
+    type: string
+    enum: [interactive, headless]
+    default: interactive
+  walk_mode:
+    type: string
+    enum: [fresh, refresh, deepen, start_over, auto]
+    default: auto
+    description: "Override the walk mode. 'auto' detects from existing data."
+  stop_after_tier:
+    type: integer
+    minimum: 1
+    maximum: 4
+    description: "Stop after this tier number (1-4). Default is all tiers."

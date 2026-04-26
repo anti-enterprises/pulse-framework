@@ -1,0 +1,98 @@
+name: glossary
+version: 1
+description: >
+  Key terms in the Pulse Skills Framework. Canonical definitions
+  used across all skills, documentation, and operator communication.
+
+terms:
+  - term: atom
+    definition: >
+      The smallest unit of intelligence in Pulse. A single extracted claim,
+      statistic, quote, entity mention, or thematic observation. Atoms are
+      typed (claim, stat, quote, entity, theme), sourced (extraction, authored,
+      field_note, corpus_query), and linked to directions, hypotheses, and factors.
+    related: [direction, hypothesis, factor, source]
+
+  - term: direction
+    definition: >
+      A named trend or shift observed in the market. Directions have a
+      lifecycle (nascent -> emerging -> hardening -> established -> peaking ->
+      declining -> stale), a momentum score (-1 to +1), and a confidence
+      score (0 to 1). Atoms accumulate under directions as evidence.
+    related: [atom, hypothesis, factor]
+
+  - term: hypothesis
+    definition: >
+      A testable belief about the market or customer. Hypotheses have a
+      lifecycle (proposed -> active -> hardening -> confirmed / contested ->
+      retired) and are supported or contradicted by atoms. The framework
+      tracks evidence for and against.
+    related: [atom, direction]
+
+  - term: factor
+    definition: >
+      An external force that influences the business environment. Factors
+      are typed (regulatory, technological, economic, cultural, demographic,
+      competitive, supply_chain, channel) and weighted 0-10 for impact.
+    related: [direction, atom]
+
+  - term: source
+    definition: >
+      A URL or feed that Pulse monitors for new intelligence. Sources have
+      a kind (web_page, rss, podcast, youtube, etc.), a strategic role
+      (direct_competitor, trust_network, etc.), and health status tracking.
+    related: [atom, strategic role]
+
+  - term: workspace
+    definition: >
+      A self-contained intelligence environment for one business context.
+      Contains identity, customer profile, offer, goals, position, ecosystem,
+      sources, atoms, directions, hypotheses, and factors. All files live
+      under ~/.pulse/workspaces/<id>/.
+    related: [identity, customer profile, offer, goals, position]
+
+  - term: skill
+    definition: >
+      A repeatable unit of work in Pulse. Skills are defined by a SKILL.md
+      with YAML frontmatter (metadata) and a markdown body (procedure).
+      Skills declare their inputs, outputs, knowledge dependencies, and
+      runtime configuration. They live under ~/.pulse/skills/<layer>/<name>/.
+    related: [playbook, knowledge]
+
+  - term: playbook
+    definition: >
+      An ordered sequence of skill invocations with checkpoints, branching,
+      and failure handling. Playbooks orchestrate multi-step workflows like
+      onboarding or quarterly reviews. They live under ~/.pulse/playbooks/.
+    related: [skill]
+
+  - term: position matrix
+    definition: >
+      A Robbins-inspired 4x2 matrix that captures the current season (spring,
+      summer, autumn, winter) and lifecycle stage (1-7) across four dimensions:
+      person, business, industry, economy. Combined with an intention (push into
+      growth, harden foundations, etc.) to guide strategic emphasis.
+    related: [position, season, lifecycle stage, intention]
+
+  - term: season
+    definition: >
+      One of four phases in a cyclical model: spring (planting/building),
+      summer (growth/execution), autumn (harvesting/consolidating), winter
+      (conserving/planning). Applied to person, business, industry, and
+      economy dimensions in the position matrix.
+    related: [position matrix, lifecycle stage]
+
+  - term: lifecycle stage
+    definition: >
+      A 1-7 scale representing progression within a dimension: 1 (pre-launch),
+      2 (launch), 3 (early traction), 4 (growth), 5 (maturity), 6 (renewal),
+      7 (decline or exit). Combined with season in the position matrix.
+    related: [position matrix, season]
+
+  - term: intention
+    definition: >
+      The strategic posture the operator has chosen given their current position.
+      One of: push_into_growth, harden_foundations, prepare_for_transition,
+      experiment_aggressively, harvest, pivot, hold. Intention shapes which
+      skills the router emphasizes and how outputs are framed.
+    related: [position matrix]

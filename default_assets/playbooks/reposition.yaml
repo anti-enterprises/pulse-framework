@@ -1,0 +1,63 @@
+name: pulse reposition
+version: 1.0.0
+description: >
+  Rebuild positioning from scratch. Re-walks each kickoff skill,
+  surfacing what changed. Existing answers are shown first.
+layer: kickoff
+cadence: ad_hoc
+operator_time: "~45m"
+
+requires:
+  workspace_exists: true
+
+defaults: {}
+
+steps:
+  - id: identity
+    skill: pulse set-identity
+    with:
+      mode: interactive
+    on_failure: halt
+
+  - id: checkpoint_identity
+    checkpoint:
+      prompt: "Identity updated. Continue to customer profile?"
+      options:
+        - label: "Continue"
+          action: proceed
+        - label: "Stop here"
+          action: halt_gracefully
+
+  - id: customer
+    skill: pulse profile-customer
+    with:
+      mode: interactive
+    on_failure: halt
+
+  - id: offer
+    skill: pulse articulate-offer
+    on_failure: halt
+
+  - id: goals
+    skill: pulse set-goals
+    on_failure: halt
+
+  - id: position
+    skill: pulse set-position
+    on_failure: halt
+
+  - id: checkpoint_ecosystem
+    checkpoint:
+      prompt: "Core positioning updated. Refresh ecosystem mapping?"
+      options:
+        - label: "Yes, refresh ecosystem"
+          action: proceed
+        - label: "Skip ecosystem, finish here"
+          action: halt_gracefully
+
+  - id: ecosystem
+    skill: pulse map-ecosystem
+    on_failure: log_and_continue
+
+on_complete:
+  print_summary: true

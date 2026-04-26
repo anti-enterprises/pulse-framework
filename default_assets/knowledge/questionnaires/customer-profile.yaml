@@ -1,0 +1,368 @@
+name: customer-profile
+description: >
+  Deep customer profile questionnaire. Builds the foundational customer
+  profile every downstream Pulse skill draws on. Organized in four tiers
+  of depth — each tier stands alone as a usable profile.
+intro: >
+  This questionnaire builds the foundational customer profile every
+  downstream Pulse skill draws on. It's organized in four tiers of
+  depth. You can stop after any tier and come back — each tier stands
+  alone as a usable profile.
+
+  Answer as specifically as you can. If you don't know, say so
+  explicitly and we'll flag those fields for later firming up.
+
+tiers:
+  # ────────────────────────────────────────────────────────────
+  # TIER 1: IDENTITY
+  # ────────────────────────────────────────────────────────────
+  - name: Identity
+    time_estimate: "5 min"
+    description: "Demographic and firmographic basics. The minimum needed for other skills to function."
+    questions:
+      - key: descriptor
+        prompt: >
+          In one sentence, who is your primary target customer?
+          (Imagine describing them to a new hire in 10 seconds.)
+        type: free_text
+        examples:
+          - "AI-curious SMB founders, 10-50 employees, $1M-$20M revenue, running professional services or early-stage software businesses."
+        help: "Be as specific as possible. 'SMBs' is not an answer."
+
+      - key: role_titles
+        prompt: "What specific job titles or roles do they hold? (List 3-5.)"
+        type: list
+        examples: ["Founder", "CEO", "Co-founder", "Chief of Staff", "VP Marketing", "Head of Growth"]
+        help: "List actual titles they'd have on LinkedIn."
+
+      - key: company_stage
+        prompt: "What stage company do they typically run?"
+        type: enum
+        values: [pre_revenue, early_revenue, early_growth, scale, mid_market, enterprise]
+        help: "pre_revenue | early_revenue (<$500K) | early_growth ($500K-$5M) | scale ($5M-$50M) | mid_market ($50M-$500M) | enterprise ($500M+)"
+
+      - key: revenue_range_usd
+        prompt: "Revenue range (USD)?"
+        type: free_text
+        examples: ["1M-20M"]
+
+      - key: employee_range
+        prompt: "Team size range?"
+        type: free_text
+        examples: ["10-50"]
+
+      - key: industries_served
+        prompt: >
+          What industries are they primarily in?
+          (List 2-5, or say 'industry-agnostic' if that's the positioning.)
+        type: list
+        examples: ["professional_services", "e-commerce", "b2b_saas"]
+
+      - key: geography_primary
+        prompt: "Primary geography?"
+        type: free_text
+        examples: ["US_Canada"]
+
+      - key: geography_secondary
+        prompt: "Secondary geographies? (List any additional regions.)"
+        type: list
+        examples: ["UK", "AU"]
+
+      - key: tech_stack_signals
+        prompt: >
+          What technology do they typically use? Any telltale stack signals?
+          (e.g., uses Notion, not Confluence; uses Linear, not Jira)
+        type: free_text
+        examples:
+          - "Notion, Slack, Linear, Vercel, Supabase, Stripe. Modern stack, avoids enterprise incumbents."
+        help: "Tech choices reveal worldview. Enterprise tools vs modern stack is a strong segmentation signal."
+
+  # ────────────────────────────────────────────────────────────
+  # TIER 2: PSYCHOLOGY
+  # ────────────────────────────────────────────────────────────
+  - name: Psychology
+    time_estimate: "8 min"
+    description: "Worldview, anxieties, aspirations, decision style, status signals."
+    questions:
+      - key: worldview
+        prompt: >
+          Describe their worldview in 2-3 sentences. What's their stance
+          toward their industry? What do they believe about how business
+          should work? What are they skeptical of?
+        type: free_text
+        examples:
+          - "Skeptical of enterprise SaaS and its complexity. Values operator leverage over team growth. Admires first-principles thinkers. Suspicious of hype cycles but trusts peer recommendations."
+
+      - key: anxieties
+        prompt: >
+          What anxieties keep them up at night? What are they afraid of?
+          (3-7 specific items.)
+        type: list
+        examples:
+          - "falling behind on AI while competitors catch up"
+          - "hiring mistakes that slow the team"
+          - "vendor lock-in"
+          - "missing a category shift"
+
+      - key: aspirations
+        prompt: >
+          What do they aspire to? What does 'winning' look like for them?
+          (3-5 specific items.)
+        type: list
+        examples:
+          - "build something durable that outlasts fashion cycles"
+          - "stay lean while growing revenue 3x/year"
+          - "be cited as an authority in their space"
+
+      - key: decision_style
+        prompt: "How do they make buying decisions?"
+        type: enum
+        values: [fast_informed_skeptical, slow_consensus, experimental_iterative, recommendation_driven, analysis_paralysis]
+        help: >
+          fast_informed_skeptical = research then decide quickly.
+          slow_consensus = committee-based, multiple stakeholders.
+          experimental_iterative = try small, expand.
+          recommendation_driven = buy what trusted voices buy.
+          analysis_paralysis = research endlessly.
+
+      - key: buying_triggers
+        prompt: >
+          What events or feelings trigger buying behavior for them?
+          (3-5 specific triggers.)
+        type: list
+        examples:
+          - "a trusted voice publicly endorses a tool"
+          - "a visible competitor adopts something"
+          - "a specific failure creates urgency"
+
+      - key: status_signals
+        prompt: >
+          What do they do or own that signals status within their peer group?
+          (Helps identify hangout venues and publication preferences.)
+        type: list
+        examples:
+          - "subscribes to paid newsletters (The Information, Stratechery)"
+          - "attends SaaStr / ShopTalk / Y Combinator events"
+          - "has a personal domain with a thoughtful blog"
+
+      - key: self_narrative
+        prompt: >
+          How do they describe themselves when they introduce themselves?
+          What story do they tell about what they do?
+        type: free_text
+        examples:
+          - "Often avoids 'founder' or 'CEO' in favor of 'operator' or 'builder.' Emphasizes the work, not the title."
+        help: "This reveals their real identity — often different from their LinkedIn title."
+
+      - key: language
+        prompt: >
+          What specific words, phrases, or jargon do they use frequently?
+          What words do they avoid?
+        type: free_text
+        examples:
+          - "Uses: leverage, operator, compounding, durable, build, ship. Avoids: synergy, solution (as marketing word), enterprise-grade, transformation."
+        help: "Language fidelity is the single highest-leverage input for downstream copy generation."
+
+  # ────────────────────────────────────────────────────────────
+  # TIER 3: JOBS AND PAIN
+  # ────────────────────────────────────────────────────────────
+  - name: "Jobs and Pain"
+    time_estimate: "8 min"
+    description: "JTBD, pain points, current solutions, switching costs. DemandCurve-heavy."
+    questions:
+      - key: jobs_to_be_done
+        prompt: >
+          What jobs are they hiring your product or service to do?
+          (DemandCurve-style: 'when ___, I want to ___, so I can ___'.)
+          List 3-5 distinct jobs in order of importance.
+        type: structured_list
+        fields:
+          - name: job
+            type: free_text
+            example: "figure out which AI tools are worth adopting"
+          - name: when_trigger
+            type: free_text
+            example: "quarterly planning, when budget is on the table"
+          - name: so_that
+            type: free_text
+            example: "my team doesn't fall behind on capability curves"
+          - name: urgency
+            type: enum
+            options: [critical, high, medium, low, background]
+          - name: frequency
+            type: enum
+            options: [continuous, weekly, monthly, quarterly, annually, one_time]
+
+      - key: pain_points
+        prompt: >
+          What specific pains do they feel? Use their language.
+          (5-10 items ideally.)
+        type: list
+        examples:
+          - "can't evaluate AI vendor claims"
+          - "tools don't integrate with our stack"
+          - "analysis paralysis — too many options"
+          - "no clear ROI story for AI experiments"
+
+      - key: current_solutions
+        prompt: >
+          What are they doing today to solve these jobs? Even if badly.
+          (Current solutions reveal switching dynamics and competitive moats.)
+        type: list
+        examples:
+          - "ChatGPT Team subscriptions"
+          - "internal scripts hacked together by engineers"
+          - "ad-hoc consulting engagements"
+
+      - key: switching_friction
+        prompt: >
+          What makes it hard for them to switch from current solutions
+          to yours? (Time, money, habit, org politics, sunk cost, learning curve.)
+        type: free_text
+        examples:
+          - "Moderate switching friction. Most haven't committed deeply to any AI stack. But trust barrier is higher than tool barrier."
+
+      - key: wins_they_want
+        prompt: >
+          What specific wins or outcomes would make them say 'this was
+          worth it'?
+        type: list
+        examples:
+          - "saved 10+ hours a week on research"
+          - "shipped 2-3 AI features customers actually use"
+          - "I feel caught up, not behind"
+
+      - key: wish_list_items
+        prompt: >
+          What are the 'I wish...' statements you've heard from them?
+          (Direct quotes from reviews, sales calls, customer interviews.)
+        type: list
+        examples:
+          - "I wish I had one person who could tell me what's real and what's hype"
+          - "I wish these tools worked together"
+          - "I wish I could pay for outcomes, not software seats"
+
+      - key: dissatisfactions_with_alternatives
+        prompt: >
+          What do they complain about regarding your competitors or
+          alternatives? (From reviews, forums, word-of-mouth.)
+        type: free_text
+        examples:
+          - "Consulting firms: too slow, too generic. SaaS tools: don't work out of the box. AI products: hype ratio too high."
+
+  # ────────────────────────────────────────────────────────────
+  # TIER 4: TRUST NETWORK
+  # ────────────────────────────────────────────────────────────
+  - name: "Trust Network"
+    time_estimate: "10 min"
+    description: >
+      Who they trust and where they go. Abraham's prospect profiling
+      combined with Hormozi's ecosystem mapping.
+    questions:
+      - key: trust_voices
+        prompt: >
+          Who are the specific voices, experts, or authorities they
+          admire or follow? (List 5-10 with rationale.)
+        type: structured_list
+        fields:
+          - name: name
+            type: free_text
+            example: "Alex Hormozi"
+          - name: why
+            type: free_text
+            example: "pragmatic, operator-framed, anti-enterprise"
+          - name: platform
+            type: free_text
+            example: "YouTube / X / Acquisition.com"
+
+      - key: publications_read
+        prompt: "What publications, newsletters, or blogs do they read regularly?"
+        type: list
+        examples:
+          - "The Information (paid)"
+          - "Stratechery (paid)"
+          - "Lenny's Newsletter"
+
+      - key: podcasts_listened
+        prompt: "What podcasts do they listen to?"
+        type: list
+        examples:
+          - "Acquired"
+          - "All-In"
+          - "Lenny's Podcast"
+
+      - key: events_attended
+        prompt: "What events or conferences do they attend (or wish they could)?"
+        type: list
+        examples:
+          - "SaaStr Annual"
+          - "AI Engineer Summit"
+          - "local founder dinners"
+
+      - key: hangouts_online
+        prompt: >
+          Where do they hang out online? Communities, subreddits,
+          Discords, Slacks, forums?
+        type: list
+        examples:
+          - "r/ExperiencedDevs"
+          - "SaaStr Slack"
+          - "Hormozi's Skool community"
+
+      - key: hangouts_offline
+        prompt: "Where do they hang out offline? Cities, coworking spaces, meetups?"
+        type: list
+        examples:
+          - "NYC, SF, Austin founder communities"
+          - "local founder dinners"
+          - "specific coworking spaces"
+
+      - key: buys_before
+        prompt: >
+          What do they buy or use BEFORE your product comes into their
+          life? (Hormozi/Abraham before-during-after.)
+        type: list
+        examples:
+          - "CRM (Hubspot, Pipedrive)"
+          - "analytics (Segment, Amplitude)"
+          - "basic AI tools (ChatGPT Team, GitHub Copilot)"
+        help: "Reveals complementary partners and customer-journey entry points."
+
+      - key: buys_during
+        prompt: "What do they buy or use ALONGSIDE your product?"
+        type: list
+        examples:
+          - "OpenAI / Anthropic API credits"
+          - "vertical SaaS for their industry"
+          - "performance marketing tools"
+
+      - key: buys_after
+        prompt: >
+          What do they buy or use AFTER your product has done its work —
+          or as they mature?
+        type: list
+        examples:
+          - "custom development contractors"
+          - "AI infrastructure (Pinecone, Replicate)"
+          - "growth marketing consultancies"
+
+      - key: direct_competitors_known
+        prompt: >
+          Name 5-10 direct competitors they're aware of or have
+          considered. (Hormozi ecosystem starting point.)
+        type: list
+        examples:
+          - "Gradient AI"
+          - "Scale AI (enterprise arm)"
+          - "Consulting firms: Slalom, Accenture AI practice"
+
+      - key: adjacent_winners_inspiration
+        prompt: >
+          What businesses in completely different industries would serve
+          as models or inspiration for your positioning?
+        type: list
+        examples:
+          - "Shopify — opinionated platform for a specific operator type"
+          - "Linear — tool that won by being opinionated against enterprise defaults"
+          - "Stripe — premium pricing defended by quality positioning"
+        help: "Abraham cross-industry intelligence. Often the most surprising and useful answers."

@@ -1,0 +1,55 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - declared
+  - intention
+properties:
+  declared:
+    type: object
+    description: "The Robbins 4x2 position matrix"
+    required:
+      - person
+      - business
+      - industry
+      - economy
+    properties:
+      person:
+        $ref: "#/$defs/position_layer"
+      business:
+        $ref: "#/$defs/position_layer"
+      industry:
+        $ref: "#/$defs/position_layer"
+      economy:
+        $ref: "#/$defs/position_layer"
+  detected:
+    type: object
+    description: "Auto-detected position (populated later by detection skills)"
+    nullable: true
+  intention:
+    type: string
+    enum:
+      - push_into_growth
+      - harden_foundations
+      - prepare_for_transition
+      - experiment_aggressively
+      - harvest
+      - pivot
+      - hold
+  position_last_reviewed:
+    type: string
+    format: date-time
+
+$defs:
+  position_layer:
+    type: object
+    required:
+      - season
+      - lifecycle_stage
+    properties:
+      season:
+        type: string
+        enum: [spring, summer, autumn, winter]
+      lifecycle_stage:
+        type: integer
+        minimum: 1
+        maximum: 7
