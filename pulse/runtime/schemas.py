@@ -154,6 +154,7 @@ class SkillCadence(StrEnum):
     AD_HOC = "ad_hoc"
     PERIODIC = "periodic"
     ONE_TIME = "one_time"
+    DAILY = "daily"
     WEEKLY = "weekly"
     MONTHLY = "monthly"
     QUARTERLY = "quarterly"

@@ -63,6 +63,7 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("add-source", "skill", "discovery", "Add a source manually.", 7),
     # ── Listen (3) ──
     CommandEntry("extract", "skill", "listen", "Extract atoms from sources.", 7),
+    CommandEntry("daily-extract", "skill", "listen", "Lightweight daily atom extraction.", 7),
     CommandEntry("mine-reviews", "skill", "listen", "Mine review aggregators.", 7),
     CommandEntry("scan-ads", "skill", "listen", "Scan ad libraries.", 7),
     # ── Synthesis (5) ──
@@ -81,6 +82,7 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("postmortem", "skill", "reflect", "Hypothesis postmortem.", 7),
     CommandEntry("connect-source", "skill", "reflect", "Register an external source.", 7),
     # ── Playbooks (3) ──
+    CommandEntry("daily", "playbook", "playbook", "Daily source scan. ~3 min.", 7, aliases=("pulse d",)),
     CommandEntry("weekly", "playbook", "playbook", "Weekly intelligence pass. ~10 min.", 7, aliases=("pulse intel", "pulse w")),
     CommandEntry("monthly", "playbook", "playbook", "Monthly synthesis. ~25 min.", 7),
     CommandEntry("quarterly", "playbook", "playbook", "Quarterly review. ~60 min.", 7),

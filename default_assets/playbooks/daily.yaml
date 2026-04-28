@@ -1,0 +1,36 @@
+name: pulse daily
+version: 1.0.0
+description: >
+  Quick daily source scan. Extracts high-signal atoms from active sources
+  and links them to existing directions. No hypothesis proposal or digest.
+layer: operational
+cadence: daily
+operator_time: "~3m"
+aliases:
+  - pulse d
+
+requires:
+  workspace_exists: true
+  position_set: true
+  sources_min: 1
+
+defaults:
+  window_days: 1
+  max_atoms_per_source: 10
+
+steps:
+  - id: extract
+    skill: pulse daily-extract
+    with:
+      window: "last_24h"
+    on_failure: log_and_continue
+    timeout_s: 300
+
+  - id: link_atoms_to_directions
+    skill: pulse update-directions
+    with:
+      link_only: "true"
+    on_failure: log_and_continue
+
+on_complete:
+  print_summary: true

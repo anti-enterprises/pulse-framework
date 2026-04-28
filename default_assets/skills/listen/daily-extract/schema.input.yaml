@@ -1,0 +1,22 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - workspace_id
+properties:
+  workspace_id:
+    type: string
+    description: "Active workspace identifier"
+  window:
+    type: string
+    default: "last_24h"
+    description: "Time window for extraction (e.g., last_24h, last_48h)"
+  max_per_source:
+    type: integer
+    default: 10
+    minimum: 1
+    maximum: 25
+    description: "Maximum atoms to extract per source"
+  types:
+    type: string
+    default: "claim,stat"
+    description: "Comma-separated atom types to extract (claim, stat, quote, entity, theme)"

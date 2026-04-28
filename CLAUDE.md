@@ -35,7 +35,7 @@ Five layers, bottom to top:
 6. **Run `pulse init` before anything else** if `~/.pulse/` does not exist
 7. **Skills are procedures, not wikis** — each has numbered steps, declared I/O, and explicit outputs
 
-## Command Catalog (45 active + 3 deferred)
+## Command Catalog (52 active + 3 deferred)
 
 ### Meta
 | Command | Description |
@@ -75,6 +75,7 @@ Five layers, bottom to top:
 | Command | Description |
 |---------|-------------|
 | `pulse extract` | Extract atoms from curated sources |
+| `pulse daily-extract` | Lightweight daily atom extraction (claims + stats only) |
 | `pulse mine-reviews` | Mine review aggregators |
 | `pulse scan-ads` | Scan ad libraries |
 
@@ -105,6 +106,7 @@ Five layers, bottom to top:
 ### Playbooks (composed workflows)
 | Command | Description |
 |---------|-------------|
+| `pulse daily` | Daily source scan (~3 min). Alias: `pulse d` |
 | `pulse weekly` | Weekly intelligence pass (~10 min). Aliases: `pulse intel`, `pulse w` |
 | `pulse monthly` | Monthly synthesis (~25 min) |
 | `pulse quarterly` | Quarterly review (~60 min) |
@@ -128,7 +130,8 @@ Five layers, bottom to top:
 
 ## Operational Cadences
 
-- **Daily/ad-hoc**: `pulse extract`, `pulse propose-hypothesis`
+- **Daily** (`pulse daily`): daily-extract → link atoms to directions. ~3 min.
+- **Ad-hoc**: `pulse extract`, `pulse propose-hypothesis`
 - **Weekly** (`pulse weekly`): extract → score → update directions → write digest. ~10 min.
 - **Monthly** (`pulse monthly`): weekly + commodity patterns + gap map + monthly digest. ~25 min.
 - **Quarterly** (`pulse quarterly`): monthly + drift audit + postmortems + ecosystem refresh. ~60 min.
@@ -160,7 +163,7 @@ mypy pulse/                 # Type check
 
 ## Key Files
 
-- `pulse/manifest.py` — Single source of truth for all 48 commands
+- `pulse/manifest.py` — Single source of truth for all 55 commands
 - `pulse/runtime/schemas.py` — All Pydantic v2 data models
 - `pulse/runtime/skill.py` — Skill discovery and execution engine
 - `pulse/runtime/playbook.py` — Playbook runner (6 composition patterns)

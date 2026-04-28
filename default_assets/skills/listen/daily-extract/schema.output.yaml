@@ -1,0 +1,14 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+required:
+  - atoms_created
+  - sources_processed
+properties:
+  atoms_created:
+    type: integer
+    minimum: 0
+    description: "Count of new atoms written to atoms/"
+  sources_processed:
+    type: integer
+    minimum: 0
+    description: "Count of sources successfully processed"
