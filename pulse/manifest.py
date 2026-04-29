@@ -21,8 +21,8 @@ class CommandEntry:
     aliases: tuple[str, ...] = ()
 
 
-# Canonical v1 command manifest — 48 entries
-# (45 active + 3 deferred)
+# Canonical v1 command manifest — 55 entries
+# (52 active + 3 deferred)
 MANIFEST: tuple[CommandEntry, ...] = (
     # ── Meta (11) ──
     CommandEntry("init", "builtin", "meta", "One-time framework setup.", 2, "implemented"),
@@ -32,8 +32,11 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("workspace-status", "builtin", "meta", "Workspace state summary.", 2, "implemented"),
     CommandEntry("workspace-archive", "builtin", "meta", "Archive a workspace.", 7),
     CommandEntry("reindex", "builtin", "meta", "Rebuild SQLite index.", 2, "implemented"),
-    CommandEntry("refine", "builtin", "meta", "Append refinement note to a skill.", 7),
+    CommandEntry("refine", "builtin", "meta", "Append refinement note to a skill.", 7, "implemented"),
     CommandEntry("evolve", "builtin", "meta", "Propose skill updates from refinement notes.", 7),
+    CommandEntry("evolve-all", "builtin", "meta", "Evolve all skills with pending refinement notes.", 7, "implemented"),
+    CommandEntry("refine-from-runs", "builtin", "meta", "Propose refinements from run history.", 7, "implemented"),
+    CommandEntry("import-refinements", "builtin", "meta", "Import refinement notes from a YAML file.", 7, "implemented"),
     CommandEntry("refine-router", "builtin", "meta", "Append refinement note to router tree.", 7),
     CommandEntry("help", "builtin", "meta", "Show help.", 1, "implemented"),
     # ── Kickoff (7) ──
@@ -44,6 +47,7 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("articulate-offer", "skill", "kickoff", "Offer block.", 6),
     CommandEntry("set-goals", "skill", "kickoff", "Goals block.", 6),
     CommandEntry("set-position", "skill", "kickoff", "Position block.", 6),
+    CommandEntry("set-refinement-criteria", "skill", "kickoff", "Define refinement criteria for the workspace.", 7),
     # ── Knowledge (4) ──
     CommandEntry("author-knowledge", "skill", "knowledge", "Author a knowledge file.", 7),
     CommandEntry("refine-knowledge", "skill", "knowledge", "Refine knowledge files.", 7),
@@ -61,7 +65,7 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("scan-acquisitions", "skill", "discovery", "Frasier acquisition wheel.", 7),
     CommandEntry("type-sources", "skill", "discovery", "Assign strategic roles to URLs.", 6),
     CommandEntry("add-source", "skill", "discovery", "Add a source manually.", 7),
-    # ── Listen (3) ──
+    # ── Listen (4) ──
     CommandEntry("extract", "skill", "listen", "Extract atoms from sources.", 7),
     CommandEntry("daily-extract", "skill", "listen", "Lightweight daily atom extraction.", 7),
     CommandEntry("mine-reviews", "skill", "listen", "Mine review aggregators.", 7),

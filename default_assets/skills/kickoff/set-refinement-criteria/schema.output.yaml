@@ -1,0 +1,14 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+type: object
+properties:
+  criteria_count:
+    type: integer
+    description: Total number of criteria defined.
+  categories:
+    type: object
+    additionalProperties:
+      type: integer
+    description: Count of criteria per category.
+  file_path:
+    type: string
+    description: Path to the written criteria.yaml file.

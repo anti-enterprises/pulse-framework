@@ -80,6 +80,13 @@ steps:
       mode: "{{ defaults.mode }}"
     on_failure: log_and_continue
 
+  # ── Step 5b: Set refinement criteria ─────────────────────
+  - id: set_refinement_criteria
+    skill: pulse set-refinement-criteria
+    with:
+      mode: "{{ defaults.mode }}"
+    on_failure: log_and_continue
+
   # ── Checkpoint: core kickoff complete ─────────────────────
   - id: checkpoint_ecosystem
     checkpoint:

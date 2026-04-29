@@ -428,6 +428,23 @@ class Source(BaseModel):
 
 
 # ──────────────────────────────────────────────────────────────
+# Refinement Criteria
+# ──────────────────────────────────────────────────────────────
+
+
+class RefinementCriterion(BaseModel):
+    id: str
+    name: str
+    description: str
+    category: Literal["performance", "quality", "coverage", "freshness", "custom"]
+    target_skills: list[str] = Field(default_factory=list)
+    rule: str
+    severity: Literal["info", "warning", "critical"] = "warning"
+    enabled: bool = True
+    created_at: datetime
+
+
+# ──────────────────────────────────────────────────────────────
 # Pipeline, Run
 # ──────────────────────────────────────────────────────────────
 

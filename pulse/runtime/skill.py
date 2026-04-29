@@ -159,6 +159,22 @@ class Skill:
 
             # 8-12. Validate, write, log, complete
             run_logger.log_event({"event": "skill_execution_complete"})
+
+            # Post-execution feedback capture (opt-in)
+            self._maybe_collect_feedback(run_logger)
+
+            # Auto-refinement heuristics (non-fatal)
+            try:
+                from pulse.runtime.heuristics import check_post_run_heuristics
+                from pulse.runtime.refinement import write_refinement
+
+                auto_notes = check_post_run_heuristics(self, run_logger, result, workspace_id)
+                for note in auto_notes:
+                    write_refinement(self.path, note)
+                    run_logger.log_event({"event": "auto_refinement", "note": note})
+            except Exception:
+                pass  # Heuristics must never block execution
+
             run_logger.complete(RunStatus.SUCCEEDED)
 
             return result
@@ -169,7 +185,45 @@ class Skill:
                 "error": str(e),
             })
             run_logger.complete(RunStatus.FAILED, error_message=str(e))
+
+            # Post-failure heuristics (non-fatal)
+            try:
+                from pulse.runtime.heuristics import check_failure_heuristics
+                from pulse.runtime.refinement import write_refinement
+
+                failure_notes = check_failure_heuristics(self, workspace_id, str(e))
+                for note in failure_notes:
+                    write_refinement(self.path, note)
+            except Exception:
+                pass  # Never mask the original error
+
             raise
+
+    def _maybe_collect_feedback(self, run_logger: Any) -> None:
+        """Prompt the operator for a post-execution observation (opt-in).
+
+        Gated by ``logs.collect_feedback: true`` in SKILL.md frontmatter.
+        Only prompts in interactive (TTY) sessions.
+        """
+        import sys
+
+        if not self.meta.logs.get("collect_feedback", False):
+            return
+        if not sys.stdin.isatty():
+            return
+
+        try:
+            note = input("Observation for this run (Enter to skip): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            return
+
+        if not note:
+            return
+
+        from pulse.runtime.refinement import write_refinement
+
+        write_refinement(self.path, note)
+        run_logger.log_event({"event": "feedback_captured", "note": note})
 
     def _validate_inputs(self, inputs: dict[str, Any]) -> None:
         """Validate inputs against declared schema."""

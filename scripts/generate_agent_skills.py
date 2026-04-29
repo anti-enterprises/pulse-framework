@@ -51,6 +51,15 @@ DESCRIPTIONS: dict[str, str] = {
     ),
     "refine": "Use when adding a refinement note to an existing Pulse skill procedure.",
     "evolve": "Use when proposing updates to a Pulse skill from accumulated refinement notes.",
+    "evolve-all": "Use when evolving all skills that have pending refinement notes at once.",
+    "refine-from-runs": (
+        "Use when analyzing recent run history to discover refinement opportunities. "
+        "LLM-scans run logs and proposes actionable refinement notes interactively."
+    ),
+    "import-refinements": (
+        "Use when bulk-importing refinement notes from a YAML file. "
+        "Follows the same pattern as source upload — one file, multiple skills."
+    ),
     "refine-router": "Use when adding a refinement note to the Pulse interactive router decision tree.",
     "help": "Use when listing available Pulse commands or getting help on a specific command.",
     # Kickoff
@@ -82,6 +91,10 @@ DESCRIPTIONS: dict[str, str] = {
     "set-position": (
         "Use when defining the workspace's strategic position — "
         "4x2 matrix and intention statement."
+    ),
+    "set-refinement-criteria": (
+        "Use when defining refinement criteria during onboarding — "
+        "what to watch for when skills execute (performance, quality, coverage, freshness)."
     ),
     # Knowledge
     "author-knowledge": "Use when creating a new knowledge file for the Pulse framework.",
@@ -119,6 +132,11 @@ DESCRIPTIONS: dict[str, str] = {
         "Use when extracting intelligence atoms from curated sources. "
         "Reads sources.yaml, fetches content, produces structured observation atoms. "
         "Part of the weekly cadence."
+    ),
+    "daily-extract": (
+        "Use when running a lightweight daily atom extraction. "
+        "Single LLM call per source, claims and stats only, 24h window. "
+        "Part of the daily cadence."
     ),
     "mine-reviews": (
         "Use when mining customer review aggregators for intelligence atoms — "
@@ -177,6 +195,11 @@ DESCRIPTIONS: dict[str, str] = {
     ),
     "connect-source": "Use when registering an external intelligence source for ongoing monitoring.",
     # Playbooks
+    "daily": (
+        "Use when running the daily source scan (~3 min). "
+        "Lightweight extraction of high-signal atoms and direction linking. "
+        "Alias: pulse d."
+    ),
     "weekly": (
         "Use when running the weekly intelligence pass (~10 min). "
         "Extracts atoms, scores signals, updates directions, writes digest. "
@@ -459,9 +482,13 @@ def generate_builtin_type(entry) -> str:
     elif entry.name == "reindex":
         sections.append(f"```bash\npulse {entry.name} [id]\n```")
     elif entry.name == "refine":
-        sections.append(f"```bash\npulse {entry.name} <skill>\n```")
+        sections.append(f"```bash\npulse {entry.name} <skill> [note]\n```")
     elif entry.name == "evolve":
         sections.append(f"```bash\npulse {entry.name} <skill>\n```")
+    elif entry.name == "refine-from-runs":
+        sections.append(f"```bash\npulse {entry.name} [--days N] [--skill VERB]\n```")
+    elif entry.name == "import-refinements":
+        sections.append(f"```bash\npulse {entry.name} <file.yaml> [--dry-run]\n```")
     else:
         sections.append(f"```bash\npulse {entry.name}\n```")
 

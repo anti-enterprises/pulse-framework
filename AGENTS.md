@@ -4,7 +4,7 @@
 
 ## What This Is
 
-A Python CLI (`pulse <verb>`) that operationalizes six business advisory frameworks into repeatable procedures. 45 commands across 9 layers: meta, kickoff, knowledge, corpus, discovery, listen, synthesis, action, reflect.
+A Python CLI (`pulse <verb>`) that operationalizes six business advisory frameworks into repeatable procedures. 52 commands across 9 layers: meta, kickoff, knowledge, corpus, discovery, listen, synthesis, action, reflect.
 
 ## Setup
 
@@ -24,6 +24,7 @@ pulse help                    # List all commands
 pulse help <verb>             # Help for one command
 pulse workspace-new <id>      # Create a workspace
 pulse onboard <id>            # Full kickoff (~60 min interactive)
+pulse daily                   # Daily source scan (~3 min)
 pulse weekly                  # Routine intelligence pass
 pulse workspace-status        # Show workspace state
 ```
@@ -47,6 +48,7 @@ Bare `pulse` (no verb) launches an interactive decision-tree router. Requires a 
 pulse init                     # Framework setup
 pulse workspace-new <id>       # Create workspace
 pulse onboard <id>             # Full kickoff (playbook)
+pulse daily                    # Daily source scan (playbook)
 pulse weekly                   # Weekly pass (playbook)
 pulse monthly                  # Monthly synthesis (playbook)
 pulse quarterly                # Quarterly review (playbook)
@@ -83,6 +85,7 @@ pulse add-source               # Add one source
 ### Intelligence
 ```
 pulse extract                  # Extract atoms from sources
+pulse daily-extract            # Lightweight daily extraction (claims+stats)
 pulse mine-reviews             # Mine review sites
 pulse scan-ads                 # Scan ad libraries
 pulse propose-hypothesis       # Propose hypotheses from atoms
@@ -124,6 +127,7 @@ pulse disable-corpus           # Disable corpus
 ```
 pulse refine <skill>           # Note on a skill
 pulse evolve <skill>           # Evolve skill from notes
+pulse evolve-all               # Evolve all skills with pending notes
 pulse refine-router            # Note on router tree
 ```
 

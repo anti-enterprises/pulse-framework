@@ -35,7 +35,7 @@ Five layers, bottom to top:
 6. **Run `pulse init` before anything else** if `~/.pulse/` does not exist
 7. **Skills are procedures, not wikis** — each has numbered steps, declared I/O, and explicit outputs
 
-## Command Catalog (52 active + 3 deferred)
+## Command Catalog (55 active + 3 deferred)
 
 ### Meta
 | Command | Description |
@@ -47,8 +47,11 @@ Five layers, bottom to top:
 | `pulse workspace-status [id]` | Workspace state summary |
 | `pulse workspace-archive <id>` | Archive a workspace |
 | `pulse reindex [id]` | Rebuild SQLite index from filesystem |
-| `pulse refine <skill>` | Append refinement note to a skill |
+| `pulse refine <skill> [note]` | Append refinement note to a skill |
 | `pulse evolve <skill>` | Propose skill updates from refinement notes |
+| `pulse evolve-all` | Evolve all skills with pending refinement notes |
+| `pulse refine-from-runs [--days N]` | LLM-scan run history, propose refinements |
+| `pulse import-refinements <file>` | Bulk-import refinement notes from YAML |
 | `pulse refine-router` | Append refinement note to router tree |
 
 ### Kickoff (run once per workspace)
@@ -61,6 +64,7 @@ Five layers, bottom to top:
 | `pulse articulate-offer` | Offer: promise, mechanism, pricing, proof |
 | `pulse set-goals` | Goals: primary, secondary, bets, constraints |
 | `pulse set-position` | Position: 4x2 matrix + intention |
+| `pulse set-refinement-criteria` | Define what to watch for when skills run |
 
 ### Discovery
 | Command | Description |

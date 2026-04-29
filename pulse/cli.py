@@ -51,7 +51,11 @@ def build_registry() -> CommandRegistry:
     Phase 3+: also scans ~/.pulse/skills/ and ~/.pulse/playbooks/.
     """
     from pulse.commands.corpus import run_corpus_status, run_disable_corpus, run_enable_corpus
+    from pulse.commands.evolve_all import run_evolve_all
+    from pulse.commands.import_refinements import run_import_refinements
     from pulse.commands.init import run_init
+    from pulse.commands.refine import run_refine
+    from pulse.commands.refine_from_runs import run_refine_from_runs
     from pulse.commands.reindex import run_reindex
     from pulse.commands.workspace_list import run_workspace_list
     from pulse.commands.workspace_new import run_workspace_new
@@ -68,6 +72,10 @@ def build_registry() -> CommandRegistry:
         "enable-corpus": run_enable_corpus,
         "disable-corpus": run_disable_corpus,
         "corpus-status": run_corpus_status,
+        "evolve-all": run_evolve_all,
+        "refine": run_refine,
+        "refine-from-runs": run_refine_from_runs,
+        "import-refinements": run_import_refinements,
     }
 
     registry = CommandRegistry()
