@@ -16,7 +16,7 @@ Pulse solves this by encoding the methodologies of Hormozi, Abraham, Frasier, De
 
 **Everything version-controllable and human-readable.** All state is YAML, JSONL, and Markdown on your filesystem. SQLite indexes are regenerable, never the source of truth. You can `git init` a workspace and get full history of every intelligence decision.
 
-**AI-agent native.** 50 Claude Code skills, an MCP server for Claude Desktop, and a setup script that registers Pulse with your agent in one command. Every `pulse <verb>` works identically whether you type it or your agent invokes it.
+**AI-agent native.** 63 Claude Code skills, an MCP server for Claude Desktop, and a setup script that registers Pulse with your agent in one command. Every `pulse <verb>` works identically whether you type it or your agent invokes it.
 
 ### Who this is for
 
@@ -96,6 +96,22 @@ Pulse is designed to run inside AI coding agents. Every skill has declared input
 ```
 
 This symlinks Pulse skills into `~/.claude/skills/` or `~/.codex/skills/`. Once registered, Pulse commands are available as slash commands: `/pulse-weekly`, `/pulse-onboard`, `/pulse-extract`, etc.
+
+### Layer skills
+
+Beyond individual commands, Pulse provides layer-level skills that let you selectively run skills from a layer. Instead of remembering individual command names, invoke the layer and pick from a menu:
+
+| Slash command | Layer | Skills you can pick from |
+|--------------|-------|------------------------|
+| `/pulse-discover` | Discovery | map-ecosystem, map-trust-network, scan-acquisitions, type-sources, add-source |
+| `/pulse-listen` | Listen | extract, daily-extract, mine-reviews, scan-ads |
+| `/pulse-synthesize` | Synthesis | propose-hypothesis, score-signals, update-directions, find-commodity-pattern, find-gaps |
+| `/pulse-act` | Action | write-brief, write-positioning, draft-survey, draft-outreach |
+| `/pulse-reflect` | Reflect | audit-drift, postmortem, connect-source |
+| `/pulse-knowledge` | Knowledge | author-knowledge, refine-knowledge, evolve-knowledge, knowledge-status |
+| `/pulse-corpus-run` | Corpus | ingest, corpus-query, corpus-status, enable-corpus, disable-corpus |
+
+Each presents a numbered menu and asks which skills to run (e.g., "1,3" or "all"), then executes them sequentially.
 
 ### Schedule as a routine
 
@@ -229,7 +245,7 @@ Run once per workspace to establish the strategic foundation. All outputs write 
 
 ### Discovery
 
-Map the competitive landscape and curate intelligence sources. Outputs go to `ecosystem/` and `sources/`.
+Map the competitive landscape and curate intelligence sources. Outputs go to `ecosystem/` and `sources/`. Run selectively with `/pulse-discover`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -241,7 +257,7 @@ Map the competitive landscape and curate intelligence sources. Outputs go to `ec
 
 ### Listen
 
-Extract intelligence from curated sources. All outputs are atoms written to `atoms/YYYY-MM/atoms.jsonl`.
+Extract intelligence from curated sources. All outputs are atoms written to `atoms/YYYY-MM/atoms.jsonl`. Run selectively with `/pulse-listen`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -252,7 +268,7 @@ Extract intelligence from curated sources. All outputs are atoms written to `ato
 
 ### Synthesis
 
-Detect patterns, test hypotheses, and identify market opportunities.
+Detect patterns, test hypotheses, and identify market opportunities. Run selectively with `/pulse-synthesize`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -264,7 +280,7 @@ Detect patterns, test hypotheses, and identify market opportunities.
 
 ### Action
 
-Produce deliverables grounded in accumulated intelligence. Outputs go to `briefs/`, `positioning/`, `surveys/`, and `outreach/`.
+Produce deliverables grounded in accumulated intelligence. Outputs go to `briefs/`, `positioning/`, `surveys/`, and `outreach/`. Run selectively with `/pulse-act`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -275,7 +291,7 @@ Produce deliverables grounded in accumulated intelligence. Outputs go to `briefs
 
 ### Reflect
 
-Audit positioning, capture learnings, and maintain the intelligence system.
+Audit positioning, capture learnings, and maintain the intelligence system. Run selectively with `/pulse-reflect`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -285,7 +301,7 @@ Audit positioning, capture learnings, and maintain the intelligence system.
 
 ### Knowledge
 
-Manage the reusable framework material that skills reference at runtime. Outputs go to `~/.pulse/knowledge/`.
+Manage the reusable framework material that skills reference at runtime. Outputs go to `~/.pulse/knowledge/`. Run selectively with `/pulse-knowledge`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -296,7 +312,7 @@ Manage the reusable framework material that skills reference at runtime. Outputs
 
 ### Corpus
 
-Optional RAG backend for querying source material during knowledge authoring.
+Optional RAG backend for querying source material during knowledge authoring. Run selectively with `/pulse-corpus-run`.
 
 | Command | Time | What you get |
 |---------|------|-------------|
@@ -321,6 +337,10 @@ Workspace lifecycle, framework evolution, and help.
 | `pulse reindex [id]` | Rebuild the SQLite index from filesystem state |
 | `pulse refine <skill>` | Append a refinement note to any skill's procedure |
 | `pulse evolve <skill>` | Synthesize accumulated refinement notes into proposed skill updates with version bumping |
+| `pulse evolve-all` | Evolve all skills with pending refinement notes in one pass |
+| `pulse refine-from-runs` | Propose refinements by analyzing recent run history |
+| `pulse import-refinements` | Import refinement notes from a YAML file |
+| `pulse set-refinement-criteria` | Define refinement criteria for the workspace |
 | `pulse refine-router` | Append a refinement note to the interactive router decision tree |
 | `pulse help [command]` | Show help for all commands or a specific command |
 
@@ -423,6 +443,10 @@ Includes the full monthly pass, then adds strategic review:
 6. `pulse write-brief` — generate quarterly review
 
 **Output:** Everything from the monthly pass, plus drift audit, hypothesis postmortems, refreshed ecosystem map, and a quarterly brief.
+
+### Layer skills -- selective execution
+
+For ad-hoc work outside the cadenced playbooks, layer skills let you pick which skills to run from any layer. Invoke `/pulse-discover`, `/pulse-listen`, `/pulse-synthesize`, `/pulse-act`, `/pulse-reflect`, `/pulse-knowledge`, or `/pulse-corpus-run` in Claude Code or Codex. Each presents the layer's skills as a numbered menu.
 
 ## Optional: local RAG corpus
 
