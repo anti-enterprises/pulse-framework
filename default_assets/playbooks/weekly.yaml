@@ -1,12 +1,12 @@
 name: pulse weekly
 version: 1.0.0
 description: >
-  Routine weekly intelligence pass. Extracts new content from active
-  sources, scores signals against active hypotheses, updates direction
-  momentum, and produces a weekly digest.
+  Weekly intelligence pass. Reviews daily results and atoms from the last
+  7 days, sweeps every active eligible source at weekly depth, scores signals
+  against active hypotheses, updates direction momentum, and writes a digest.
 layer: operational
 cadence: weekly
-operator_time: "~10m"
+operator_time: "uncapped; varies by eligible source count"
 aliases:
   - pulse intel
   - pulse w
@@ -19,14 +19,26 @@ requires:
 defaults:
   window_days: 7
   max_atoms_per_source: 50
+  source_scope: eligible_active
+  analysis_depth: weekly
+  exclude_source_kinds: "review_aggregator"
+  exclude_strategic_roles: "review_aggregator"
+  exclude_tags: "software_reviews"
 
 steps:
   - id: extract
     skill: pulse extract
     with:
       window: "last_7d"
+      max_per_source: 50
+      source_scope: eligible_active
+      analysis_depth: weekly
+      include_cadences: daily,weekly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
+      last_run_policy: ignore_lower_cadence
     on_failure: log_and_continue
-    timeout_s: 600
 
   - id: link_atoms_to_directions
     skill: pulse update-directions
@@ -41,12 +53,22 @@ steps:
   - id: propose_new
     skill: pulse propose-hypothesis
     when: "true"
+    with:
+      analysis_depth: weekly
+      require_repeated_source_support: "true"
     on_failure: log_and_continue
 
   - id: write_digest
     skill: pulse write-brief
     with:
       kind: weekly_digest
+      cadence_window: "last_7d"
+      analysis_depth: weekly
+      source_scope: eligible_active
+      include_cadences: daily,weekly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
     on_failure: log_and_continue
 
 on_complete:

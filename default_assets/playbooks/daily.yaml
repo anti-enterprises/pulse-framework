@@ -1,11 +1,12 @@
 name: pulse daily
 version: 1.0.0
 description: >
-  Quick daily source scan. Extracts high-signal atoms from active sources
-  and links them to existing directions. No hypothesis proposal or digest.
+  Daily eligible-source review. Scans every active eligible source, excluding
+  only public review/software-review sources, extracts high-signal atoms, links
+  them to existing directions, and writes a concise daily result.
 layer: operational
 cadence: daily
-operator_time: "~3m"
+operator_time: "uncapped; varies by eligible source count"
 aliases:
   - pulse d
 
@@ -17,19 +18,43 @@ requires:
 defaults:
   window_days: 1
   max_atoms_per_source: 10
+  source_scope: eligible_active
+  analysis_depth: daily
+  exclude_source_kinds: "review_aggregator"
+  exclude_strategic_roles: "review_aggregator"
+  exclude_tags: "software_reviews"
 
 steps:
   - id: extract
     skill: pulse daily-extract
     with:
       window: "last_24h"
+      max_per_source: 10
+      types: "claim,stat"
+      source_scope: eligible_active
+      analysis_depth: daily
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
     on_failure: log_and_continue
-    timeout_s: 300
 
   - id: link_atoms_to_directions
     skill: pulse update-directions
     with:
       link_only: "true"
+    on_failure: log_and_continue
+
+  - id: write_daily_result
+    skill: pulse write-brief
+    with:
+      kind: daily_result
+      cadence_window: "last_24h"
+      analysis_depth: daily
+      source_scope: eligible_active
+      include_cadences: daily
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
     on_failure: log_and_continue
 
 on_complete:

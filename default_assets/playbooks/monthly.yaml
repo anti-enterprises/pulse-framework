@@ -1,11 +1,12 @@
 name: pulse monthly
 version: 1.0.0
 description: >
-  Monthly synthesis. Extends the weekly pass with commodity-pattern
-  detection, gap-map analysis, and a monthly digest.
+  Monthly synthesis. Reviews daily and weekly results plus atoms from the
+  last 30 days, runs a monthly-depth eligible-source sweep, updates commodity
+  patterns and gaps, and writes a monthly digest.
 layer: operational
 cadence: monthly
-operator_time: "~25m"
+operator_time: "uncapped; varies by eligible source count"
 
 requires:
   workspace_exists: true
@@ -14,23 +15,62 @@ requires:
 
 defaults:
   window_days: 30
+  max_atoms_per_source: 100
+  source_scope: eligible_active
+  analysis_depth: monthly
+  exclude_source_kinds: "review_aggregator"
+  exclude_strategic_roles: "review_aggregator"
+  exclude_tags: "software_reviews"
 
 steps:
   - id: weekly_pass
     include: weekly
 
+  - id: monthly_extract
+    skill: pulse extract
+    with:
+      window: "last_30d"
+      max_per_source: 100
+      source_scope: eligible_active
+      analysis_depth: monthly
+      include_cadences: daily,weekly,monthly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
+      last_run_policy: ignore_lower_cadence
+    on_failure: log_and_continue
+
+  - id: monthly_score_signals
+    skill: pulse score-signals
+    with:
+      analysis_depth: monthly
+    on_failure: log_and_continue
+
   - id: commodity_pattern
     skill: pulse find-commodity-pattern
+    with:
+      analysis_depth: monthly
+      cadence_window: "last_30d"
     on_failure: log_and_continue
 
   - id: gap_map
     skill: pulse find-gaps
+    with:
+      analysis_depth: monthly
+      cadence_window: "last_30d"
     on_failure: log_and_continue
 
   - id: monthly_digest
     skill: pulse write-brief
     with:
       kind: monthly_digest
+      cadence_window: "last_30d"
+      analysis_depth: monthly
+      source_scope: eligible_active
+      include_cadences: daily,weekly,monthly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
     on_failure: log_and_continue
 
 on_complete:

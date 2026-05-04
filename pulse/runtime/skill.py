@@ -140,6 +140,7 @@ class Skill:
                 system, user_msg = compose_skill_prompt(
                     procedure=self.procedure,
                     knowledge=knowledge or None,
+                    inputs=inputs,
                     workspace_context=workspace_context,
                     examples=examples or None,
                 )

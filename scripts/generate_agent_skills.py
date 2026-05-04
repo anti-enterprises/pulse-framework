@@ -129,14 +129,12 @@ DESCRIPTIONS: dict[str, str] = {
     "add-source": "Use when manually adding a single intelligence source to the workspace.",
     # Listen
     "extract": (
-        "Use when extracting intelligence atoms from curated sources. "
-        "Reads sources.yaml, fetches content, produces structured observation atoms. "
-        "Part of the weekly cadence."
+        "Use when extracting intelligence atoms from all active eligible sources "
+        "at weekly, monthly, or quarterly depth, excluding only review/software-review sources."
     ),
     "daily-extract": (
-        "Use when running a lightweight daily atom extraction. "
-        "Single LLM call per source, claims and stats only, 24h window. "
-        "Part of the daily cadence."
+        "Use when running daily atom extraction across all active eligible sources. "
+        "Claims and stats only, last-24h/new-since-last-run window, review sources excluded."
     ),
     "mine-reviews": (
         "Use when mining customer review aggregators for intelligence atoms — "
@@ -169,8 +167,8 @@ DESCRIPTIONS: dict[str, str] = {
     ),
     # Action
     "write-brief": (
-        "Use when generating content briefs from intelligence analysis — "
-        "turning hypotheses and signals into actionable content plans."
+        "Use when generating cadence artifacts and briefs from Pulse intelligence, "
+        "including daily results, weekly digests, monthly digests, and quarterly reviews."
     ),
     "write-positioning": (
         "Use when drafting a positioning statement — synthesizing identity, "
@@ -196,22 +194,22 @@ DESCRIPTIONS: dict[str, str] = {
     "connect-source": "Use when registering an external intelligence source for ongoing monitoring.",
     # Playbooks
     "daily": (
-        "Use when running the daily source scan (~3 min). "
-        "Lightweight extraction of high-signal atoms and direction linking. "
+        "Use when running the uncapped daily eligible-source scan. "
+        "Extracts high-signal atoms, links directions, and writes a daily result. "
         "Alias: pulse d."
     ),
     "weekly": (
-        "Use when running the weekly intelligence pass (~10 min). "
-        "Extracts atoms, scores signals, updates directions, writes digest. "
+        "Use when running the uncapped weekly intelligence pass. "
+        "Reviews daily results plus 7-day atoms/sources, scores signals, and writes a digest. "
         "Aliases: pulse intel, pulse w."
     ),
     "monthly": (
-        "Use when running the monthly synthesis (~25 min). Weekly pass plus "
-        "commodity pattern detection, gap mapping, and monthly digest."
+        "Use when running the uncapped monthly synthesis. Reviews daily and weekly results "
+        "plus 30-day atoms/sources, commodity patterns, gaps, and monthly digest."
     ),
     "quarterly": (
-        "Use when running the quarterly review (~60 min). Monthly pass plus "
-        "drift audit, postmortems, ecosystem refresh, and quarterly brief."
+        "Use when running the uncapped quarterly review. Reviews daily, weekly, and monthly "
+        "results plus 90-day atoms/sources, drift, postmortems, ecosystem refresh, and quarterly brief."
     ),
 }
 

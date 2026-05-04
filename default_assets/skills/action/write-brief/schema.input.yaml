@@ -10,9 +10,43 @@ properties:
   kind:
     type: string
     enum:
+      - daily_result
       - weekly_digest
       - monthly_digest
       - quarterly_review
       - hypothesis_brief
       - direction_brief
     description: "Type of brief to generate"
+  cadence_window:
+    type: string
+    description: "Concrete cadence window to summarize, e.g. last_24h, last_7d, last_30d, last_90d"
+  analysis_depth:
+    type: string
+    enum:
+      - daily
+      - weekly
+      - monthly
+      - quarterly
+    description: "Cadence-specific analysis depth"
+  source_scope:
+    type: string
+    default: "eligible_active"
+    enum:
+      - eligible_active
+      - active
+    description: "Source scope represented by the brief"
+  include_cadences:
+    type: string
+    description: "Comma-separated cadence artifacts to load before writing"
+  exclude_source_kinds:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated source kinds excluded from source review"
+  exclude_strategic_roles:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated strategic roles excluded from source review"
+  exclude_tags:
+    type: string
+    default: "software_reviews"
+    description: "Comma-separated tags excluded from source review"

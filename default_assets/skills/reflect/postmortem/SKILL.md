@@ -20,7 +20,16 @@ inputs:
   hypothesis_id:
     type: string
     required: true
-    description: "ID of the hypothesis to review"
+    description: "ID of the hypothesis to review, or due_for_review to review all due hypotheses"
+  cadence_window:
+    type: string
+    required: false
+    description: "Cadence window for due-hypothesis review"
+  analysis_depth:
+    type: enum
+    values: [quarterly]
+    required: false
+    description: "Cadence-specific analysis depth"
 outputs:
   postmortem_path:
     description: "Path to the postmortem report"
@@ -45,6 +54,17 @@ refinements: []
 ## 1. Load hypothesis and evidence
 
 Read the target hypothesis from `hypotheses/`.
+
+If `hypothesis_id` is `due_for_review`, select all hypotheses due for a
+quarterly lifecycle review:
+- state is confirmed, retired, contested, stale, or hardening
+- or confidence crossed a major threshold during the `cadence_window`
+- or no matching `reports/postmortem-{hypothesis_code}-*.md` exists yet
+
+Process each due hypothesis independently and write one postmortem report per
+hypothesis. If no hypotheses are due, return a completed summary with no files
+written.
+
 Load all supporting and contradicting atoms.
 Load related directions and their trajectories.
 

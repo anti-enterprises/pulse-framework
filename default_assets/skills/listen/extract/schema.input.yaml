@@ -16,3 +16,41 @@ properties:
     minimum: 1
     maximum: 500
     description: "Maximum atoms to extract per source"
+  source_scope:
+    type: string
+    default: "eligible_active"
+    enum:
+      - eligible_active
+      - active
+    description: "Source scope to scan"
+  analysis_depth:
+    type: string
+    default: "weekly"
+    enum:
+      - weekly
+      - monthly
+      - quarterly
+    description: "Cadence-specific extraction depth"
+  include_cadences:
+    type: string
+    default: "weekly"
+    description: "Comma-separated cadence outputs to consider during synthesis"
+  exclude_source_kinds:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated source kinds to exclude"
+  exclude_strategic_roles:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated strategic roles to exclude"
+  exclude_tags:
+    type: string
+    default: "software_reviews"
+    description: "Comma-separated tags to exclude"
+  last_run_policy:
+    type: string
+    default: "respect_last_run"
+    enum:
+      - respect_last_run
+      - ignore_lower_cadence
+    description: "Whether lower-cadence runs should be allowed to suppress this cadence's window review"

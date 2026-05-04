@@ -1,12 +1,13 @@
 name: pulse quarterly
 version: 1.0.0
 description: >
-  Quarterly position audit and review. Extends the monthly pass with
-  position drift audit, hypothesis postmortems, ecosystem refresh,
-  and a quarterly review brief.
+  Quarterly position audit and review. Reviews daily, weekly, and monthly
+  results plus atoms from the last 90 days, runs a quarterly-depth
+  eligible-source sweep, performs drift/postmortem/ecosystem review, and
+  writes the quarterly brief.
 layer: operational
 cadence: quarterly
-operator_time: "~60m"
+operator_time: "uncapped; varies by eligible source count"
 
 requires:
   workspace_exists: true
@@ -15,21 +16,58 @@ requires:
 
 defaults:
   window_days: 90
+  max_atoms_per_source: 150
+  source_scope: eligible_active
+  analysis_depth: quarterly
+  exclude_source_kinds: "review_aggregator"
+  exclude_strategic_roles: "review_aggregator"
+  exclude_tags: "software_reviews"
 
 steps:
   - id: monthly_pass
     include: monthly
 
+  - id: quarterly_extract
+    skill: pulse extract
+    with:
+      window: "last_90d"
+      max_per_source: 150
+      source_scope: eligible_active
+      analysis_depth: quarterly
+      include_cadences: daily,weekly,monthly,quarterly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
+      last_run_policy: ignore_lower_cadence
+    on_failure: log_and_continue
+
+  - id: quarterly_score_signals
+    skill: pulse score-signals
+    with:
+      analysis_depth: quarterly
+    on_failure: log_and_continue
+
   - id: drift_audit
     skill: pulse audit-drift
+    with:
+      analysis_depth: quarterly
+      cadence_window: "last_90d"
     on_failure: log_and_continue
 
   - id: postmortems
     skill: pulse postmortem
+    with:
+      analysis_depth: quarterly
+      cadence_window: "last_90d"
+      hypothesis_id: due_for_review
     on_failure: log_and_continue
 
   - id: ecosystem_refresh
     skill: pulse map-ecosystem
+    with:
+      mode: headless
+      expand_via_web: "true"
+      analysis_depth: quarterly
     on_failure: log_and_continue
 
   - id: checkpoint_review
@@ -45,6 +83,13 @@ steps:
     skill: pulse write-brief
     with:
       kind: quarterly_review
+      cadence_window: "last_90d"
+      analysis_depth: quarterly
+      source_scope: eligible_active
+      include_cadences: daily,weekly,monthly,quarterly
+      exclude_source_kinds: "review_aggregator"
+      exclude_strategic_roles: "review_aggregator"
+      exclude_tags: "software_reviews"
     on_failure: log_and_continue
 
 on_complete:

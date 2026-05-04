@@ -17,6 +17,7 @@ import yaml
 def compose_skill_prompt(
     procedure: str,
     knowledge: dict[str, str] | None = None,
+    inputs: dict[str, Any] | None = None,
     workspace_context: dict[str, Any] | None = None,
     examples: list[str] | None = None,
 ) -> tuple[str, str]:
@@ -46,6 +47,11 @@ def compose_skill_prompt(
     if workspace_context:
         user_parts.append("--- WORKSPACE CONTEXT ---\n")
         user_parts.append(yaml.dump(workspace_context, default_flow_style=False))
+        user_parts.append("")
+
+    if inputs:
+        user_parts.append("--- INPUTS ---\n")
+        user_parts.append(yaml.dump(inputs, default_flow_style=False))
         user_parts.append("")
 
     user_parts.append("--- PROCEDURE ---\n")

@@ -68,6 +68,7 @@ class AtomType(StrEnum):
 
 
 class DirectionState(StrEnum):
+    ACTIVE = "active"
     NASCENT = "nascent"
     EMERGING = "emerging"
     HARDENING = "hardening"
@@ -109,6 +110,8 @@ class SourceKind(StrEnum):
     RSS = "rss"
     PODCAST = "podcast"
     YOUTUBE = "youtube"
+    NEWSLETTER = "newsletter"
+    REDDIT = "reddit"
     REVIEW_AGGREGATOR = "review_aggregator"
     AD_LIBRARY = "ad_library"
     COMMUNITY_FORUM = "community_forum"
@@ -120,6 +123,7 @@ class StrategicRole(StrEnum):
     DIRECT_COMPETITOR = "direct_competitor"
     SUBSTITUTE = "substitute"
     COMPLEMENTARY = "complementary"
+    INDUSTRY_SIGNAL = "industry_signal"
     PARTNER_CANDIDATE = "partner_candidate"
     TRUST_NETWORK = "trust_network"
     COMMUNITY_FORUM = "community_forum"
@@ -131,13 +135,16 @@ class StrategicRole(StrEnum):
 
 class SourceHealth(StrEnum):
     HEALTHY = "healthy"
+    UNKNOWN = "unknown"
     WARNING = "warning"
+    FAILING = "failing"
     DEGRADED = "degraded"
     BROKEN = "broken"
 
 
 class SourceStatus(StrEnum):
     ACTIVE = "active"
+    PENDING = "pending"
     PAUSED = "paused"
     ARCHIVED = "archived"
 

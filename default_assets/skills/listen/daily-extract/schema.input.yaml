@@ -20,3 +20,28 @@ properties:
     type: string
     default: "claim,stat"
     description: "Comma-separated atom types to extract (claim, stat, quote, entity, theme)"
+  source_scope:
+    type: string
+    default: "eligible_active"
+    enum:
+      - eligible_active
+      - active
+    description: "Source scope to scan"
+  analysis_depth:
+    type: string
+    default: "daily"
+    enum:
+      - daily
+    description: "Cadence-specific analysis depth"
+  exclude_source_kinds:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated source kinds to exclude"
+  exclude_strategic_roles:
+    type: string
+    default: "review_aggregator"
+    description: "Comma-separated strategic roles to exclude"
+  exclude_tags:
+    type: string
+    default: "software_reviews"
+    description: "Comma-separated tags to exclude"

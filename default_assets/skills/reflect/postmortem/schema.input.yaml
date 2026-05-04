@@ -9,4 +9,12 @@ properties:
     description: "Target workspace ID"
   hypothesis_id:
     type: string
-    description: "ID of the hypothesis to review"
+    description: "ID of the hypothesis to review, or due_for_review to review all due hypotheses"
+  cadence_window:
+    type: string
+    description: "Cadence window for due-hypothesis review"
+  analysis_depth:
+    type: string
+    enum:
+      - quarterly
+    description: "Cadence-specific analysis depth"

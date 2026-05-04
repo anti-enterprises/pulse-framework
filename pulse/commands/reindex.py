@@ -23,9 +23,19 @@ def run_reindex(args: tuple[str, ...] = ()) -> None:
     console.print(f"\n[bold]Rebuilding index for '{workspace_id}'...[/bold]")
 
     try:
-        atom_count = rebuild_index(workspace_id)
+        result = rebuild_index(workspace_id)
     except Exception as e:
         console.print(f"\n[red]Error:[/red] {e}\n")
         raise SystemExit(1) from e
 
-    console.print(f"[green]Index rebuilt. {atom_count} atoms indexed.[/green]\n")
+    console.print(f"[green]Index rebuilt. {result.atom_count} atoms indexed.[/green]")
+    if result.skipped:
+        console.print(f"[yellow]{len(result.skipped)} rows skipped while rebuilding index:[/yellow]")
+        for skipped in result.skipped[:20]:
+            console.print(
+                f"  - {skipped.table}: {skipped.row_id} "
+                f"({skipped.source_file}) - {skipped.reason}"
+            )
+        if len(result.skipped) > 20:
+            console.print(f"  ... and {len(result.skipped) - 20} more")
+    console.print()
