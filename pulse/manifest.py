@@ -21,10 +21,10 @@ class CommandEntry:
     aliases: tuple[str, ...] = ()
 
 
-# Canonical v1 command manifest — 55 entries
-# (52 active + 3 deferred)
+# Canonical v1 command manifest — 56 entries
+# (53 active + 3 deferred)
 MANIFEST: tuple[CommandEntry, ...] = (
-    # ── Meta (11) ──
+    # ── Meta (12) ──
     CommandEntry("init", "builtin", "meta", "One-time framework setup.", 2, "implemented"),
     CommandEntry("workspace-new", "builtin", "meta", "Create a new workspace.", 2, "implemented"),
     CommandEntry("workspace-list", "builtin", "meta", "List all workspaces.", 2, "implemented"),
@@ -32,6 +32,7 @@ MANIFEST: tuple[CommandEntry, ...] = (
     CommandEntry("workspace-status", "builtin", "meta", "Workspace state summary.", 2, "implemented"),
     CommandEntry("workspace-archive", "builtin", "meta", "Archive a workspace.", 7),
     CommandEntry("reindex", "builtin", "meta", "Rebuild SQLite index.", 2, "implemented"),
+    CommandEntry("export", "builtin", "meta", "Export directions/hypotheses/briefs as JSON.", 2, "implemented"),
     CommandEntry("refine", "builtin", "meta", "Append refinement note to a skill.", 7, "implemented"),
     CommandEntry("evolve", "builtin", "meta", "Propose skill updates from refinement notes.", 7),
     CommandEntry("evolve-all", "builtin", "meta", "Evolve all skills with pending refinement notes.", 7, "implemented"),

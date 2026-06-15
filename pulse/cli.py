@@ -52,6 +52,7 @@ def build_registry() -> CommandRegistry:
     """
     from pulse.commands.corpus import run_corpus_status, run_disable_corpus, run_enable_corpus
     from pulse.commands.evolve_all import run_evolve_all
+    from pulse.commands.export import run_export
     from pulse.commands.import_refinements import run_import_refinements
     from pulse.commands.init import run_init
     from pulse.commands.refine import run_refine
@@ -73,6 +74,7 @@ def build_registry() -> CommandRegistry:
         "disable-corpus": run_disable_corpus,
         "corpus-status": run_corpus_status,
         "evolve-all": run_evolve_all,
+        "export": run_export,
         "refine": run_refine,
         "refine-from-runs": run_refine_from_runs,
         "import-refinements": run_import_refinements,
@@ -185,6 +187,7 @@ def _delegated_runtime() -> str | None:
     """
     try:
         import yaml
+
         from pulse.utils.paths import config_path
         cfg = config_path()
         if not cfg.exists():
@@ -227,15 +230,26 @@ def get_registry() -> CommandRegistry:
 @click.version_option(__version__, prog_name="pulse")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output.")
 @click.option("--workspace", "-w", default=None, help="Override active workspace.")
+@click.option(
+    "--non-interactive",
+    "-y",
+    is_flag=True,
+    help="Headless mode: auto-proceed past operator checkpoints (also via PULSE_NON_INTERACTIVE=1).",
+)
 @click.argument("verb", required=False)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def main(
     verbose: bool,
     workspace: str | None,
+    non_interactive: bool,
     verb: str | None,
     args: tuple[str, ...],
 ) -> None:
     """Pulse Skills Framework -- business intelligence, operationalized."""
+    if non_interactive:
+        from pulse.runtime.interactive import set_non_interactive
+        set_non_interactive(True)
+
     registry = get_registry()
     console = Console()
 

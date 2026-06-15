@@ -244,6 +244,12 @@ class PlaybookRunner:
         for i, opt in enumerate(options, 1):
             self.console.print(f"    {i}. {opt['label']}")
 
+        # Headless runs auto-proceed past checkpoints rather than blocking on stdin.
+        from pulse.runtime.interactive import is_non_interactive
+        if is_non_interactive():
+            self.console.print("    [dim](non-interactive: auto-proceeding)[/dim]")
+            return
+
         try:
             raw = input("\n  > ").strip()
         except (KeyboardInterrupt, EOFError) as exc:
